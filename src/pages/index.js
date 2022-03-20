@@ -44,7 +44,7 @@ const api = new Api({
   token: "b211c19a-1dd2-41b6-b48a-d98d5e63db67"
 });
 
-//=========================================================
+//========================================================
 
 const userInfo = new UserInfo({
   userNameElement: userNameElement,
@@ -80,9 +80,9 @@ function loadInitialCards() {
 }
 
 window.onload = () => {
-  //load initial cards from the server
   fetchData();
 }
+
 //================================================= SECTION
 // new card
 function renderCard(data) {

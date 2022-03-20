@@ -37,7 +37,7 @@ export const saveAvatarButton = document.querySelector("#modal__avatar-save-butt
 
 // place - elements - template
 export const placesList = document.querySelector(".elements__list"); //ul of place cards
-export const templateSelector = ("#elements-template");
+export const templateSelector = document.querySelector(".elements-template").content;
 
 //**-->> FORM VALIDATION SETTINGS <<--*/
 
