@@ -1,0 +1,8 @@
+.profile__avatar-edit {
+    max-height: 120px;
+    max-width: 120px;
+    background-image: url(../../../images/pencil-edit-icon.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
