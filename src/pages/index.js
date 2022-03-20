@@ -60,7 +60,7 @@ function fetchData() {
           inputJob:userData.job
         })
           userInfo.setUserAvatar(userData.avatar)
-          loadInitialCards(userData._id)
+          loadInitialCards()
         })
       .catch((err) => {
         console.log(err.status, err.statusText);
@@ -79,8 +79,10 @@ function loadInitialCards() {
     });
 }
 
-
-
+window.onload = () => {
+  //load initial cards from the server
+  fetchData();
+}
 //================================================= SECTION
 // new card
 function renderCard(data) {
@@ -96,18 +98,18 @@ function renderCard(data) {
   return card.render();
 }
 
-const elementsList = new Section(
-  {renderer: renderCard},
-  placesList // ul
-);
+// const elementsList = new Section(
+//   {renderer: renderCard},
+//   placesList // ul
+// );
 
 
-// const elementsList = new Section({
-//   renderer: (element) => {
-//     const newCard = renderCard(element);
-//     elementsList.addItem(newCard);
-//   }
-// }, placesList);
+const elementsList = new Section({
+  renderer: (element) => {
+    const newCard = renderCard(element);
+    elementsList.addItem(newCard);
+  }
+}, placesList);
 
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
@@ -118,6 +120,7 @@ function handleImagePreview(link, name) {
 
 const confirmDeletionPopup = new PopupConfirmDelete(
   confirmDeleteForm,
+  confirmDeleteButton,
   confirmDeletePlaceCard
 );
 
@@ -275,7 +278,3 @@ openAvatarPopupButton.addEventListener("click", () => {
   avatarFormValidator.disableSubmitButton();
 });
 
-window.onload = () => {
-  //load initial cards from the server
-  fetchData();
-}
