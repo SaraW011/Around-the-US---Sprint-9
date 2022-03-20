@@ -19,14 +19,15 @@ export default class Card {
     this.likeCounts = cardData.likes;
     this._confirmDelete = confirmDelete;
     this._templateSelector = templateSelector;
+    this._template = document
+    .querySelector(templateSelector).content.querySelector('.elements__element');
   }
 
-  _getTemplate() {
-    const cardElement = this._template
-      .querySelector(".elements__element")
-      .cloneNode(true);
-    return cardElement;
-  }
+  // _getTemplate() {
+  //   return this._templateSelector
+  //     .querySelector(".elements__element")
+  //     .cloneNode(true);
+  // }
 
   //method like count project 9:
   _likeCount() {
@@ -72,7 +73,11 @@ export default class Card {
   }
 
   render() {
-    this._cardElement = this._getTemplate();
+    // this._cardElement = this._templateSelector()
+    // .querySelector(".elements__element").cloneNode(true);
+    this._cardElement = this._template.cloneNode(true);
+
+
     this._cardElement.querySelector(".elements__text").textContent = this._name;
 
     this._cardElement.querySelector(
