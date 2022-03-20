@@ -37,11 +37,10 @@ import {
   fieldset,
 } from "../utils/constants.js";
 
-
 //**-->> API <<--*/
 const api = new Api({
   baseUrl: "https://around.nomoreparties.co/v1/group-12",
-  token: "b211c19a-1dd2-41b6-b48a-d98d5e63db67"
+  token: "b211c19a-1dd2-41b6-b48a-d98d5e63db67",
 });
 
 //========================================================
@@ -49,39 +48,41 @@ const api = new Api({
 const userInfo = new UserInfo({
   userNameElement: userNameElement,
   userJobElement: userJobElement,
-  avatar: profileAvatarImage
+  avatar: profileAvatarImage,
 });
 
 function fetchData() {
-  api.getUserInfo()
-      .then(userData => {
-        userInfo.setUserInfo({
-          inputName: userData.name, 
-          inputJob:userData.job
-        })
-          userInfo.setUserAvatar(userData.avatar)
-          loadInitialCards()
-        })
-      .catch((err) => {
-        console.log(err.status, err.statusText);
-        alert(err)
-  })
+  api
+    .getUserInfo()
+    .then((userData) => {
+      userInfo.setUserInfo({
+        inputName: userData.name,
+        inputJob: userData.job,
+      });
+      userInfo.setUserAvatar(userData.avatar);
+      loadInitialCards();
+    })
+    .catch((err) => {
+      console.log(err.status, err.statusText);
+      alert(err);
+    });
 }
 
 function loadInitialCards() {
-  api.getInitialCards()
-    .then(cards => {
+  api
+    .getInitialCards()
+    .then((cards) => {
       elementsList.renderer(cards);
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
-      alert(err)
+      alert(err);
     });
 }
 
 window.onload = () => {
   fetchData();
-}
+};
 
 //================================================= SECTION
 // new card
@@ -94,7 +95,7 @@ function renderCard(data) {
     likePlaceCard,
     dislikePlaceCard,
     confirmDeletionPopup
-  )
+  );
   return card.render();
 }
 
@@ -103,14 +104,15 @@ function renderCard(data) {
 //   placesList // ul
 // );
 
-
-const elementsList = new Section({
-  renderer: (element) => {
-    const newCard = renderCard(element);
-    elementsList.addItem(newCard);
-  }
-}, placesList);
-
+const elementsList = new Section(
+  {
+    renderer: (element) => {
+      const newCard = renderCard(element);
+      elementsList.addItem(newCard);
+    },
+  },
+  placesList
+);
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
 
@@ -135,7 +137,7 @@ function confirmDeletePlaceCard() {
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
-    })
+    });
 }
 
 // like card
@@ -144,8 +146,8 @@ function likePlaceCard(event, like) {
     .likeCard(like)
     .then((card) => {
       console.log(card.likes);
-      like.textContent = card.likes.length;
-      event.target.classList.add('elements__heart_active');    
+      // like.textContent = card.likes.length;
+      // event.target.classList.add('.elements__heart_active');
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
@@ -158,14 +160,13 @@ function dislikePlaceCard(event, dislike) {
     .dislikeCard(dislike)
     .then((card) => {
       console.log(card.likes);
-      dislike.textContent = card.likes.length; //likes form url path
-      event.target.classList.remove("elements__heart_active");
+      // dislike.textContent = card.likes.length; //likes form url path
+      // event.target.classList.remove(".elements__heart_active");
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
     });
 }
-
 
 // **-->> FORMS <<---------------------------------------------------------------*/
 // Project 9: all forms submitted are now linked to api and have promise chains:
@@ -199,16 +200,18 @@ function submitNewPlaceForm() {
   addNewPlaceSaveButton.textContent = "Saving...";
   api
     .addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
-    .then((card => {
-      elementsList.addItem(card);
-      addPlacePopup.close();
-    })
-    .catch((err) => {
-      console.log(err.status, err.statusText);
-    })
-    .finally(() => {
-      addNewPlaceSaveButton.textContent = "Create";
-    }));
+    .then(
+      ((card) => {
+        elementsList.addItem(card);
+        addPlacePopup.close();
+      })
+        .catch((err) => {
+          console.log(err.status, err.statusText);
+        })
+        .finally(() => {
+          addNewPlaceSaveButton.textContent = "Create";
+        })
+    );
 }
 
 // update user profile-info form:
@@ -277,4 +280,3 @@ openAvatarPopupButton.addEventListener("click", () => {
   editAvatar.open();
   avatarFormValidator.disableSubmitButton();
 });
-
