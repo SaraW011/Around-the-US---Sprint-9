@@ -1,5 +1,3 @@
-# AroundtheUS---sprint-9
-Practicum100
 # Project 9: Around The U.S.
 ### *by Sara Weissman, 2022*
 
@@ -26,7 +24,7 @@ This is a continuation of previous project 8. New subjects applied:
 - [10] Improving UX of all forms
 
 
-[Figma new images:](https://www.figma.com/file/xQVeb8gprjukPVKXiLXS5T/Sprint-9%3A-Applied-JavaScript?node-id=0%3A1)
+[Figma:](https://www.figma.com/file/xQVeb8gprjukPVKXiLXS5T/Sprint-9%3A-Applied-JavaScript?node-id=0%3A1)
 
 The project can be viewed locally (on the desktop) using a local server.
 
@@ -37,9 +35,9 @@ and imported to js: import "regenerator-runtime/runtime";
 
 ### Github-pages project:
 
-[Link to Github folder](https://github.com/SaraW011/Around-the-US---Sprint-9)
+[Link to Github folder](https://github.com/SaraW011/AroundtheUS---sprint-9)
 
-[Link to live page](https://saraw011.github.io/Around-the-US---Sprint-9/)
+[Link to live page](https://saraw011.github.io/AroundtheUS---sprint-9)
 
 Tools Used:
 * Webpack
