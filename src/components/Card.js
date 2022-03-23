@@ -1,8 +1,8 @@
 export default class Card {
   constructor(
     cardData,
-    userId,
     imagePreview,
+    userId,
     cardLike,
     cardDislike,
     confirmDelete,
@@ -15,31 +15,32 @@ export default class Card {
     this._owner = cardData.owner._id;
     this._imagePreview = imagePreview;
     this._cardDislike = cardDislike;
-    this.cardLike = cardLike;
-    this.likeCounts = cardData.likes;
+    this._cardLike = cardLike;
+    this._likeCounts = cardData.likes;
     this._confirmDelete = confirmDelete;
     this._templateSelector = templateSelector;
-    this._template = document
-      .querySelector(templateSelector)
-      .content.querySelector(".elements__element");
   }
 
-  // _getTemplate() {
-  //   return this._templateSelector
-  //     .querySelector(".elements__element")
-  //     .cloneNode(true);
-  // }
+  _getTemplate() {
+    const cardElement = document
+      .querySelector(this._templateSelector)
+      .content.querySelector(".elements__element")
+      .cloneNode(true);
+
+    return cardElement;
+  }
+
 
   //method like count project 9:
   _likeCount() {
     this._cardElement.querySelector(".elements__number-of-likes").textContent =
-      this.likeCounts.length;
+      this._likeCounts.length;
 
-    this.likeCounts.forEach((like) => {
+    this._likeCounts.forEach((like) => {
       if (like._id === this._userId) {
         this._cardElement
           .querySelector(".elements__heart")
-          .classList.add(".elements__heart_active");
+          .classList.add("elements__heart_active");
       }
     });
   }
@@ -47,7 +48,7 @@ export default class Card {
   //only owner can remove card
   _handleDeleteCard() {
     if (this._owner === this._userId) {
-      this._cardElement.remove();
+      this._cardElement.remove(".elements__trash_disabled");
       this._cardElement = null;
     }
   }
@@ -76,11 +77,10 @@ export default class Card {
   }
 
   render() {
-    // this._cardElement = this._templateSelector()
-    // .querySelector(".elements__element").cloneNode(true);
-    this._cardElement = this._template.cloneNode(true);
-
-    this._cardElement.querySelector(".elements__text").textContent = this._name;
+    this._cardElement = this._getTemplate()
+    
+    this._cardElement.querySelector(".elements__text")
+    .textContent = this._name;
 
     this._cardElement.querySelector(
       ".elements__image"

@@ -40,27 +40,26 @@ import {
 //**-->> API <<--*/
 const api = new Api({
   baseUrl: "https://around.nomoreparties.co/v1/group-12",
-  token: "b211c19a-1dd2-41b6-b48a-d98d5e63db67",
+  headers: {
+      authorization: "b211c19a-1dd2-41b6-b48a-d98d5e63db67",
+      "Content-Type": "application/json"
+  }
 });
+
 
 //========================================================
 
-const userInfo = new UserInfo({
-  userNameElement: userNameElement,
-  userJobElement: userJobElement,
-  avatar: profileAvatarImage,
-});
+const userInfo = new UserInfo(
+  userNameElement, userJobElement, profileAvatarImage
+);
 
 function fetchData() {
   api
-    .getUserInfo()
-    .then((userData) => {
-      userInfo.setUserInfo({
-        inputName: userData.name,
-        inputJob: userData.job,
-      });
-      userInfo.setUserAvatar(userData.avatar);
-      loadInitialCards();
+    .getUserData()
+    .then((data) => {
+      userInfo.setUserInfo(data.name, data.about);
+      userInfo.setUserAvatar(data.avatar);
+      loadInitialCards(data._id);
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
@@ -68,11 +67,12 @@ function fetchData() {
     });
 }
 
-function loadInitialCards() {
+
+function loadInitialCards(userId) {
   api
     .getInitialCards()
     .then((cards) => {
-      elementsList.renderer(cards);
+      elementsList.renderer(cards, userId);
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
@@ -126,10 +126,10 @@ const confirmDeletionPopup = new PopupConfirmDelete(
   confirmDeletePlaceCard
 );
 
-function confirmDeletePlaceCard() {
+function confirmDeletePlaceCard(cardId) {
   confirmDeletionPopup.open();
   api
-    .deleteCard()
+    .deleteCard(cardId)
     .then(() => {
       place.remove();
       place = null;
@@ -141,13 +141,13 @@ function confirmDeletePlaceCard() {
 }
 
 // like card
-function likePlaceCard(event, like) {
+function likePlaceCard() {  // check cardId ------------->>>>>!!!!!!
   api
     .likeCard(like)
     .then((card) => {
       console.log(card.likes);
       // like.textContent = card.likes.length;
-      // event.target.classList.add('.elements__heart_active');
+      // event.target.classList.add('elements__heart_active');
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
@@ -155,13 +155,13 @@ function likePlaceCard(event, like) {
 }
 
 // //dislike card
-function dislikePlaceCard(event, dislike) {
+function dislikePlaceCard() {
   api
     .dislikeCard(dislike)
     .then((card) => {
       console.log(card.likes);
       // dislike.textContent = card.likes.length; //likes form url path
-      // event.target.classList.remove(".elements__heart_active");
+      // event.target.classList.remove("elements__heart_active");
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
@@ -175,7 +175,8 @@ function dislikePlaceCard(event, dislike) {
 const editAvatar = new PopupWithForm(editAvatarPopup, editAvatarForm);
 editAvatar.setEventListeners();
 
-function editAvatarForm() {
+function editAvatarForm(event) {
+  event.preventDefault();
   saveAvatarButton.textContent = "saving...";
   api
     .editAvatar(inputUrlForm.value)
@@ -198,11 +199,13 @@ addPlacePopup.setEventListeners();
 
 function submitNewPlaceForm() {
   addNewPlaceSaveButton.textContent = "Saving...";
+  api.getUserData()
+  .then(userData => {
   api
     .addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
     .then(
       ((card) => {
-        elementsList.addItem(card);
+        elementsList.addItem(card, userData._id);
         addPlacePopup.close();
       })
         .catch((err) => {
@@ -212,23 +215,22 @@ function submitNewPlaceForm() {
           addNewPlaceSaveButton.textContent = "Create";
         })
     );
+  })
 }
 
 // update user profile-info form:
 const profileModal = new PopupWithForm(editProfilePopup, submitProfileForm);
 profileModal.setEventListeners();
 
-function submitProfileForm(inputs) {
+function submitProfileForm(event, inputs) {
+  event.preventDefault();
   saveProfileEditButton.textContent = "Saving...";
   api
-    .editUserInfo(inputs.name, inputs.job)
+    .editUserInfo(inputs.name, inputs.about) //html inputs
     .then((user) => {
       userInfo.setUserInfo(
-        //html input "name" values
-        {
-          inputName: user.name,
-          inputJob: user.job,
-        }
+          user.name,
+          user.about,   
       );
       profileModal.close();
     })
@@ -243,9 +245,9 @@ function submitProfileForm(inputs) {
 //---->>>>>>  holds initial values inside profile form when open:
 function currentProfileName() {
   //-----get data from UserInfo class:
-  const inputData = userInfo.getUserInfo();
+  const inputData = userInfo.setUserInfo();
   inputName.value = inputData.name;
-  inputJob.value = inputData.job;
+  inputJob.value = inputData.about;
   //call @ eventListener
 }
 //<<<<<<----

@@ -41,7 +41,7 @@
 					<!-- popup form -->
 					<form action="#" class="form form-change-profile" name="edit-profile" novalidate>
 						<input id="input_type_name" type="text" class="form__input form__input_type_name" placeholder="name" name="name" minlength="2" maxlength="40" required/> <span id="input_type_name-error" class="form__error"></span>
-						<input id="input_type_job" type="text" class="form__input form__input_type_job" placeholder="profession" name="job" minlength="2" maxlength="200" required/> <span id="input_type_job-error" class="form__error"></span>
+						<input id="input_type_job" type="text" class="form__input form__input_type_job" placeholder="profession" name="about" minlength="2" maxlength="200" required/> <span id="input_type_job-error" class="form__error"></span>
 						<button id= "edit-profile_save-button" type="submit" class="form__button form__button_disabled">Save</button>
 					</form>
 				</div>
@@ -67,7 +67,7 @@
 			<div class="modal modal_type_preview-image">
 				<div class="modal__image-wrapper">
 					<button type="button" aria-label="close-button" class="modal__close-button modal__close-button_type-preview"></button>
-					<figure> <img class="modal__image-container" src="#" alt="preview image">
+					<figure> <img class="modal__image-container" src=# alt="preview image">
 						<figcaption class="modal__image-caption"></figcaption>
 					</figure>
 				</div>
@@ -110,7 +110,7 @@
 		<!-- Cards Element Template -->
 		<template class ="elements-template">
 			<li class="elements__element">
-				<button class="elements__trash" type="button"><img src="./images/trash.svg" alt="Delete button" /></button>
+				<button class="elements__trash elements__trash_disabled" type="button"><img src="./images/trash.svg" alt="Delete button" /></button>
 				<div class="elements__image" src="" alt="image preview"></div>
 				<div class="elements__info">
 					<h2 class="elements__text"></h2>
