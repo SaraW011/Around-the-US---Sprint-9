@@ -89,30 +89,30 @@ window.onload = () => {
 function renderCard(data) {
   const card = new Card(
     data,
-    userInfo,
-    templateSelector,
     handleImagePreview,
+    userInfo,
     likePlaceCard,
     dislikePlaceCard,
-    confirmDeletionPopup
+    confirmDeletionPopup,
+    templateSelector,
   );
   return card.render();
 }
 
-// const elementsList = new Section(
-//   {renderer: renderCard},
-//   placesList // ul
-// );
-
 const elementsList = new Section(
-  {
-    renderer: (element) => {
-      const newCard = renderCard(element);
-      elementsList.addItem(newCard);
-    },
-  },
-  placesList
+  {renderer: renderCard},
+  placesList // ul
 );
+
+// const elementsList = new Section(
+//   {
+//     renderer: (element) => {
+//       const newCard = renderCard(element);
+//       elementsList.addItem(newCard);
+//     },
+//   },
+//   placesList
+// );
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
 
