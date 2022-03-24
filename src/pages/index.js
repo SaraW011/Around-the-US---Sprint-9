@@ -37,24 +37,29 @@ import {
 const api = new Api({
   baseUrl: "https://around.nomoreparties.co/v1/group-12",
   headers: {
-      authorization: "b211c19a-1dd2-41b6-b48a-d98d5e63db67",
-      "Content-Type": "application/json"
-  }
+    authorization: "b211c19a-1dd2-41b6-b48a-d98d5e63db67",
+    "Content-Type": "application/json",
+  },
 });
 
 //========================================================
 
 const userInfo = new UserInfo(
-  ".profile__name", ".profile__title", ".profile__avatar"
+  ".profile__name",
+  ".profile__title",
+  ".profile__avatar"
 );
 
 function fetchData() {
   api
     .getUserData()
     .then((data) => {
-      userInfo.setUserInfo(data.name, data.about);
+      userInfo.setUserInfo({
+        name: data.name, 
+        about: data.about, 
+        id: data._id});
       userInfo.setUserAvatar(data.avatar);
-      loadInitialCards(data._id);
+      loadInitialCards();
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
@@ -62,6 +67,9 @@ function fetchData() {
     });
 }
 
+window.onload = () => {
+  fetchData();
+};
 
 function loadInitialCards(userId) {
   api
@@ -74,11 +82,6 @@ function loadInitialCards(userId) {
       alert(err);
     });
 }
-
-window.onload = () => {
-  fetchData();
-};
-
 //================================================= SECTION
 // new card
 function renderCard(data) {
@@ -89,7 +92,7 @@ function renderCard(data) {
     likePlaceCard,
     dislikePlaceCard,
     confirmDeletionPopup,
-    templateSelector,
+    templateSelector
   );
   return card.render();
 }
@@ -99,13 +102,14 @@ function renderCard(data) {
 //   ".elements" //html section
 // );
 
-const cardContainer = new Section({
+const cardContainer = new Section(
+  {
     renderer: (element) => {
       const newCard = renderCard(element);
       cardContainer.addItem(newCard);
-    }
+    },
   },
-   ".elements"
+  ".elements"
 );
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
@@ -135,7 +139,8 @@ function confirmDeletePlaceCard(cardId) {
 }
 
 // like card
-function likePlaceCard() {  // check cardId ------------->>>>>!!!!!!
+function likePlaceCard() {
+  // check cardId ------------->>>>>!!!!!!
   api
     .likeCard(like)
     .then((card) => {
@@ -193,23 +198,22 @@ addPlacePopup.setEventListeners();
 
 function submitNewPlaceForm() {
   addNewPlaceSaveButton.textContent = "Saving...";
-  api.getUserData()
-  .then(userData => {
-  api
-    .addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
-    .then(
-      ((card) => {
-        cardContainer.addItem(card, userData._id);
-        addPlacePopup.close();
-      })
-        .catch((err) => {
-          console.log(err.status, err.statusText);
+  api.getUserData().then((userData) => {
+    api
+      .addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
+      .then(
+        ((card) => {
+          cardContainer.addItem(card, userData._id);
+          addPlacePopup.close();
         })
-        .finally(() => {
-          addNewPlaceSaveButton.textContent = "Create";
-        })
-    );
-  })
+          .catch((err) => {
+            console.log(err.status, err.statusText);
+          })
+          .finally(() => {
+            addNewPlaceSaveButton.textContent = "Create";
+          })
+      );
+  });
 }
 
 // update user profile-info form:
@@ -222,10 +226,7 @@ function submitProfileForm(event, inputs) {
   api
     .editUserInfo(inputs.name, inputs.about) //html inputs
     .then((user) => {
-      userInfo.setUserInfo(
-          user.name,
-          user.about,   
-      );
+      userInfo.setUserInfo({name: user.name, about: user.about, id:user._id});
       profileModal.close();
     })
     .catch((err) => {
@@ -239,7 +240,7 @@ function submitProfileForm(event, inputs) {
 //---->>>>>>  holds initial values inside profile form when open:
 function currentProfileName() {
   //-----get data from UserInfo class:
-  const inputData = userInfo.setUserInfo();
+  const inputData = userInfo.getUserInfo();
   inputName.value = inputData.name;
   inputJob.value = inputData.about;
   //call @ eventListener

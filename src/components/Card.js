@@ -8,10 +8,11 @@ export default class Card {
     confirmDelete,
     templateSelector
   ) {
+    this._cardData = cardData
     this._name = cardData.name;
     this._link = cardData.link;
-    this._userId = userId;
     this._cardId = cardData._id;
+    this._userId = userId;
     this._owner = cardData.owner._id;
     this._imagePreview = imagePreview;
     this._cardDislike = cardDislike;
