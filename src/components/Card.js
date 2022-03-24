@@ -16,7 +16,9 @@ export default class Card {
     this._imagePreview = imagePreview;
     this._cardDislike = cardDislike;
     this._cardLike = cardLike;
-    this._likeCounts = cardData.likes;
+    this._likeCounts = cardData.likes.length;
+    this._likesArray = cardData.likes;
+    this._myLike = false;
     this._confirmDelete = confirmDelete;
     this._templateSelector = templateSelector;
   }
@@ -33,14 +35,14 @@ export default class Card {
 
   //method like count project 9:
   _likeCount() {
-    this._cardElement.querySelector(".elements__number-of-likes").textContent =
-      this._likeCounts.length;
+    this._likeNum.textContent = this._likeCounts
 
-    this._likeCounts.forEach((like) => {
+    this._likesArray.forEach((like) => {
       if (like._id === this._userId) {
         this._cardElement
           .querySelector(".elements__heart")
           .classList.add("elements__heart_active");
+          this._myLike = true;
       }
     });
   }
@@ -55,10 +57,18 @@ export default class Card {
 
   setEventListeners() {
     // card likes
+    this._likeNum = this._cardElement.querySelector(".elements__number-of-likes")
+    
     this._cardElement
       .querySelector(".elements__heart")
-      .addEventListener("click", () => {
-        this._likeCount();
+      .addEventListener("click", event => {
+        if (!this._myLike) {
+          this._cardLike(event, this._cardId, this._likeNum);
+          this._myLike = true;
+      } else {
+          this._cardDislike(event, this._cardId, this._likeNum);
+          this._myLike = false;
+      }
       });
 
     //delete card
@@ -77,6 +87,7 @@ export default class Card {
   }
 
   render() {
+
     this._cardElement = this._getTemplate()
     
     this._cardElement.querySelector(".elements__text")
@@ -87,6 +98,7 @@ export default class Card {
     ).style.backgroundImage = `url(${this._link})`;
 
     this.setEventListeners();
+    this._likeCount()
 
     return this._cardElement;
   }

@@ -10,7 +10,6 @@ import Section from "../components/Section.js";
 import UserInfo from "../components/UserInfo.js";
 
 import {
-  profileAvatarImage,
   editProfilePopup,
   addNewPlacePopup,
   previewImagePopup,
@@ -19,8 +18,6 @@ import {
   placeForm,
   profileForm,
   avatarForm,
-  userNameElement,
-  userJobElement,
   inputName,
   inputJob,
   inputUrlForm,
@@ -32,7 +29,6 @@ import {
   openAvatarPopupButton,
   confirmDeleteButton,
   saveAvatarButton,
-  placesList,
   templateSelector,
   fieldset,
 } from "../utils/constants.js";
@@ -46,11 +42,10 @@ const api = new Api({
   }
 });
 
-
 //========================================================
 
 const userInfo = new UserInfo(
-  userNameElement, userJobElement, profileAvatarImage
+  ".profile__name", ".profile__title", ".profile__avatar"
 );
 
 function fetchData() {
@@ -72,7 +67,7 @@ function loadInitialCards(userId) {
   api
     .getInitialCards()
     .then((cards) => {
-      elementsList.renderer(cards, userId);
+      cardContainer.renderCards(cards, userId);
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
@@ -99,19 +94,19 @@ function renderCard(data) {
   return card.render();
 }
 
-const elementsList = new Section(
+const cardContainer = new Section(
   {renderer: renderCard},
-  placesList // ul
+  ".elements" //html section
 );
 
-// const elementsList = new Section(
+// const cardContainer = new Section(
 //   {
 //     renderer: (element) => {
 //       const newCard = renderCard(element);
-//       elementsList.addItem(newCard);
+//       cardContainer.addItem(newCard);
 //     },
 //   },
-//   placesList
+//    ".elements__list"
 // );
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
@@ -205,7 +200,7 @@ function submitNewPlaceForm() {
     .addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
     .then(
       ((card) => {
-        elementsList.addItem(card, userData._id);
+        cardContainer.addItem(card, userData._id);
         addPlacePopup.close();
       })
         .catch((err) => {

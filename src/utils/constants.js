@@ -14,12 +14,6 @@ export const profileForm = document.querySelector(".form-change-profile");
 export const avatarForm = document.querySelector(".form-edit-avatar");
 export const confirmDeleteForm = document.querySelector(".form-confirm-delete");
 
-
-// profile name and info:
-export const userNameElement = document.querySelector(".profile__name");
-export const userJobElement = document.querySelector(".profile__title");
-export const profileAvatarImage = document.querySelector(".profile__avatar");
-
 // input data fields in forms
 export const inputName = document.querySelector(".form__input_type_name");
 export const inputJob = document.querySelector(".form__input_type_job");
@@ -36,8 +30,7 @@ export const saveAvatarButton = document.querySelector("#modal__avatar-save-butt
 
 
 // place - elements - template
-export const placesList = document.querySelector(".elements__list"); //ul of place cards
-export const templateSelector = document.querySelector(".elements-template");
+export const templateSelector = (".elements-template");
 
 //**-->> FORM VALIDATION SETTINGS <<--*/
 
