@@ -94,20 +94,19 @@ function renderCard(data) {
   return card.render();
 }
 
-const cardContainer = new Section(
-  {renderer: renderCard},
-  ".elements" //html section
-);
-
 // const cardContainer = new Section(
-//   {
-//     renderer: (element) => {
-//       const newCard = renderCard(element);
-//       cardContainer.addItem(newCard);
-//     },
-//   },
-//    ".elements__list"
+//   {renderer: renderCard},
+//   ".elements" //html section
 // );
+
+const cardContainer = new Section({
+    renderer: (element) => {
+      const newCard = renderCard(element);
+      cardContainer.addItem(newCard);
+    }
+  },
+   ".elements"
+);
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
 
