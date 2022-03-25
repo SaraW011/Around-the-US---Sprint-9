@@ -30,7 +30,7 @@ import {
   confirmDeleteButton,
   saveAvatarButton,
   templateSelector,
-  fieldset,
+  formFieldset,
 } from "../utils/constants.js";
 
 //**-->> API <<--*/
@@ -42,17 +42,12 @@ const api = new Api({
   },
 });
 
-//========================================================
-
-const userInfo = new UserInfo(
-  ".profile__name",
-  ".profile__title",
-  ".profile__avatar"
-);
+//======================== load **USER ID** from server using Api 
+//name, about, avatar, id: 
 
 function fetchData() {
   api
-    .getUserData()
+    .getData()
     .then((data) => {
       userInfo.setUserInfo({
         name: data.name, 
@@ -71,46 +66,57 @@ window.onload = () => {
   fetchData();
 };
 
-function loadInitialCards(userId) {
+//======================== load CARDS from server using Api 
+
+function loadInitialCards() {
   api
     .getInitialCards()
     .then((cards) => {
-      cardContainer.renderCards(cards, userId);
+      cardContainer.renderCards(cards);
     })
     .catch((err) => {
       console.log(err.status, err.statusText);
       alert(err);
     });
 }
-//================================================= SECTION
+//================================================= MY INFO
+
+const userInfo = new UserInfo(
+  ".profile__name",
+  ".profile__title",
+  ".profile__avatar"
+);
+//=========================================== LOAD CARD INTO SECTION
+
+
 // new card
-function renderCard(data) {
-  const card = new Card(
-    data,
+function renderCard(cardData, userData) {
+  const card = new Card({
+    cardData,
     handleImagePreview,
-    userInfo,
     likePlaceCard,
     dislikePlaceCard,
-    confirmDeletionPopup,
-    templateSelector
-  );
+    confirmDeletePlaceCard,
+    templateSelector: templateSelector, //ul conatins li
+    userData
+  });
   return card.render();
 }
 
-// const cardContainer = new Section(
-//   {renderer: renderCard},
-//   ".elements" //html section
-// );
-
 const cardContainer = new Section(
-  {
-    renderer: (element) => {
-      const newCard = renderCard(element);
-      cardContainer.addItem(newCard);
-    },
-  },
-  ".elements"
+  {renderer: renderCard},
+  ".elements" //html section
 );
+
+// const cardContainer = new Section(
+//   {
+//     renderer: (element) => {
+//       const newCard = renderCard(element);
+//       cardContainer.addItem(newCard);
+//     },
+//   },
+//   ".elements"
+// );
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
 
@@ -124,13 +130,13 @@ const confirmDeletionPopup = new PopupConfirmDelete(
   confirmDeletePlaceCard
 );
 
-function confirmDeletePlaceCard(cardId) {
+function confirmDeletePlaceCard(card, cardId) {
   confirmDeletionPopup.open();
   api
     .deleteCard(cardId)
     .then(() => {
-      place.remove();
-      place = null;
+      card.remove();
+      card = null;
       confirmDeletionPopup.close();
     })
     .catch((err) => {
@@ -198,7 +204,6 @@ addPlacePopup.setEventListeners();
 
 function submitNewPlaceForm() {
   addNewPlaceSaveButton.textContent = "Saving...";
-  api.getUserData().then((userData) => {
     api
       .addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
       .then(
@@ -213,7 +218,6 @@ function submitNewPlaceForm() {
             addNewPlaceSaveButton.textContent = "Create";
           })
       );
-  });
 }
 
 // update user profile-info form:
@@ -252,13 +256,13 @@ previewImage.setEventListeners();
 
 //**-->> ENABLE FORM VALIDATION <<--*/
 
-const placeFormValidator = new FormValidator(fieldset, placeForm);
+const placeFormValidator = new FormValidator(formFieldset, placeForm);
 placeFormValidator.enableValidation();
 
-const profileFormValidator = new FormValidator(fieldset, profileForm);
+const profileFormValidator = new FormValidator(formFieldset, profileForm);
 profileFormValidator.enableValidation();
 
-const avatarFormValidator = new FormValidator(fieldset, avatarForm);
+const avatarFormValidator = new FormValidator(formFieldset, avatarForm);
 avatarFormValidator.enableValidation();
 
 // **-->> EVENT LISTENERS <<--*/

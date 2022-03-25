@@ -16,7 +16,7 @@ checkResponse = (res) => {
 }
   
   // 1. Loading user information from the server
-  async getUserData() {
+  async getData() {
     const res = await fetch(`${this._url}/users/me`, {
       method: "GET", //default
       headers: this._headers,

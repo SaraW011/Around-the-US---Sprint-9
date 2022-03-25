@@ -1,3 +1,5 @@
+//selectors imported into index.js intended for repetitive use:
+
 // wrapper modals
 export const editProfilePopup = document.querySelector(".modal_type_edit-profile");
 export const addNewPlacePopup = document.querySelector(".modal_type_add-place");
@@ -35,7 +37,7 @@ export const templateSelector = (".elements-template");
 //**-->> FORM VALIDATION SETTINGS <<--*/
 
 // Assign form elements to variables:
-export const fieldset = {
+export const formFieldset = {
   inputSelector: ".form__input",
   submitButtonSelector: ".form__button",
   inactiveButtonClass: "form__button_disabled",

@@ -1,30 +1,37 @@
 export default class Card {
   constructor(
     cardData,
+    templateSelector,
+
     imagePreview,
-    userId,
     cardLike,
     cardDislike,
     confirmDelete,
-    templateSelector
+    userId
   ) {
-    this._cardData = cardData
+    //info
+    this._likesArray = cardData.likes;
+    this._cardId = cardData._id;
     this._name = cardData.name;
     this._link = cardData.link;
-    this._cardId = cardData._id;
-    this._userId = userId;
-    this._owner = cardData.owner._id;
+    this._ownerId = cardData.owner._id;
+    this._templateSelector = templateSelector; //card template
+
+    //actions - listeners
     this._imagePreview = imagePreview;
-    this._cardDislike = cardDislike;
     this._cardLike = cardLike;
-    this._likeCounts = cardData.likes.length;
-    this._likesArray = cardData.likes;
-    this._myLike = false;
+    this._cardDislike = cardDislike;
     this._confirmDelete = confirmDelete;
-    this._templateSelector = templateSelector;
+
+    //parameters
+    this._userId = userId;
+    this._likeCounts = cardData.likes.length;
+    this._myLike = false;
   }
 
-  _getTemplate() {
+  //=================================== METHODS
+
+  _getCardTemplate() {
     const cardElement = document
       .querySelector(this._templateSelector)
       .content.querySelector(".elements__element")
@@ -33,50 +40,58 @@ export default class Card {
     return cardElement;
   }
 
+  //method like project 9:
+  _handleLikeImage() {
+    this._likeNum = this._cardElement.querySelector(
+      ".elements__number-of-likes"
+    );
 
-  //method like count project 9:
+    if (!this._myLike) {
+      this._cardLike(this._cardId, this._likeNum);
+      this._myLike = true;
+    } else {
+      this._cardDislike(this._cardId, this._likeNum);
+      this._myLike = false;
+    }
+  }
+
   _likeCount() {
-    this._likeNum.textContent = this._likeCounts
-
-    this._likesArray.forEach((like) => {
-      if (like._id === this._userId) {
+    this._likesArray.forEach((item) => {
+      if (item._id === this._userId) {
         this._cardElement
           .querySelector(".elements__heart")
           .classList.add("elements__heart_active");
-          this._myLike = true;
+        this._myLike = true;
       }
     });
   }
 
-  //only owner can remove card
-  _handleDeleteCard() {
-    if (this._owner === this._userId) {
-      this._cardElement.remove(".elements__trash_disabled");
-      this._cardElement = null;
-    }
+  _confirmDeleteCard() {
+    this._cardElement.remove();
+    this._cardElement = null;
   }
 
+  //only owner can remove card
+  _ownerDeleteCard() {
+    if (this._ownerId === this._userId) {
+      this._cardElement.remove(".elements__trash_disabled"); //enables
+      this._myLike = true;
+    }
+  }
+  //================================================ LISTENERS
   setEventListeners() {
     // card likes
-    this._likeNum = this._cardElement.querySelector(".elements__number-of-likes")
-    
     this._cardElement
       .querySelector(".elements__heart")
-      .addEventListener("click", event => {
-        if (!this._myLike) {
-          this._cardLike(event, this._cardId, this._likeNum);
-          this._myLike = true;
-      } else {
-          this._cardDislike(event, this._cardId, this._likeNum);
-          this._myLike = false;
-      }
+      .addEventListener("click", () => {
+        this._handleLikeImage();
       });
 
     //delete card
     this._cardElement
       .querySelector(".elements__trash")
       .addEventListener("click", () => {
-        this._handleDeleteCard(this._cardElement, this._cardId);
+        this._confirmDeleteCard(this._cardElement, this._cardId);
       });
 
     //preview image
@@ -86,11 +101,11 @@ export default class Card {
         this._imagePreview(this._link, this._name);
       });
   }
+  //==============================================================
 
   render() {
+    this._cardElement = this._getCardTemplate();
 
-    this._cardElement = this._getTemplate()
-    
     this._cardElement.querySelector(".elements__text")
     .textContent = this._name;
 
@@ -98,8 +113,11 @@ export default class Card {
       ".elements__image"
     ).style.backgroundImage = `url(${this._link})`;
 
+    this._likeNum.textContent = this._likeCounts;
+
+    this._likeCount();
+    this._ownerDeleteCard();
     this.setEventListeners();
-    this._likeCount()
 
     return this._cardElement;
   }
