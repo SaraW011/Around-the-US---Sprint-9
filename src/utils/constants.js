@@ -32,7 +32,7 @@ export const saveAvatarButton = document.querySelector("#modal__avatar-save-butt
 
 
 // place - elements - template
-export const templateSelector = (".elements-template");
+export const templateSelector = (".elements-template").content;
 
 //**-->> FORM VALIDATION SETTINGS <<--*/
 

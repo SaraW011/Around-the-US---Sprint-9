@@ -3,17 +3,25 @@ export default class Section {
       this._renderer = renderer;
       this._container = document.querySelector(containerSelector);
     }
-
-  
-    addItem(card, user) {
-      this._container.prepend(this._renderer(card, user));
+    
+    //add card to the container
+    addItem(element) {
+      this._container.prepend(element);
     }
 
-    renderCards(card, user) {
-      card.forEach(card =>{
-        // this.addItem(card, user)
-        this._container = this._renderer(card, user);
-      })
+    // renderCards(card) {
+    //   card.forEach(element =>{
+    //     this._container = this._renderer(element);
+    //   })
+    // }
+
+    //render elements on page 
+
+    renderCards(items) {
+      items.forEach((cardData) => {
+        const card = this._renderer(cardData);
+        this.addItem(card);
+      });
     }
 
   }

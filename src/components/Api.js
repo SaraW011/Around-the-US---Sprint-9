@@ -60,8 +60,8 @@ checkResponse = (res) => {
   }
 
   // 7. Deleting a card
-  async deleteCard(cardId) {
-    const res = await fetch(`${this._url}/cards/${cardId}`, {
+  async deleteCard(id) {
+    const res = await fetch(`${this._url}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers
     });
@@ -69,8 +69,8 @@ checkResponse = (res) => {
   }
 
   // 8a. Adding likes
-  async likeCard(cardId) {
-    const res = await fetch(`${this._url}/cards/likes/${cardId}`, {
+  async likeCard(id) {
+    const res = await fetch(`${this._url}/cards/likes/${id}`, {
       method: "PUT",
       headers: this._headers
     });
@@ -78,8 +78,8 @@ checkResponse = (res) => {
   }
 
   // 8b. Removing likes
-  async dislikeCard(cardId) {
-    const res = await fetch(`${this._url}/cards/likes/${cardId}`, {
+  async dislikeCard(id) {
+    const res = await fetch(`${this._url}/cards/likes/${id}`, {
       method: "DELETE",
       headers: this._headers
     });

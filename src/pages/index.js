@@ -42,31 +42,43 @@ const api = new Api({
   },
 });
 
+
 //======================== load **USER ID** from server using Api 
 //name, about, avatar, id: 
 
+// Promise.all([api.getData(), api.getInitialCards()])
+//   .then(([userData, cardsData]) => {
+//     userInfo.setUserInfo({
+//       name: userData.name, 
+//       about: userData.about,
+//       id: userData._id
+//     });
+//     userInfo.setUserAvatar(userData.avatar);
+//     cardContainer.renderCards(cardsData);
+//   })
+//   .catch(err => {
+//     console.log(err);
+// });
+
 function fetchData() {
-  api
+    api
     .getData()
-    .then((data) => {
+    .then(user => {
       userInfo.setUserInfo({
-        name: data.name, 
-        about: data.about, 
-        id: data._id});
-      userInfo.setUserAvatar(data.avatar);
-      loadInitialCards();
+        name: user.name, 
+        about: user.about, 
+        id: user._id});
+      userInfo.setUserAvatar(user.avatar);
+      loadInitialCards(user._id);
     })
     .catch((err) => {
-      console.log(err.status, err.statusText);
+      console.log(err, err.status, err.statusText);
       alert(err);
     });
 }
 
-window.onload = () => {
-  fetchData();
-};
 
-//======================== load CARDS from server using Api 
+// ======================== load CARDS from server using Api 
 
 function loadInitialCards() {
   api
@@ -75,7 +87,7 @@ function loadInitialCards() {
       cardContainer.renderCards(cards);
     })
     .catch((err) => {
-      console.log(err.status, err.statusText);
+      console.log(err, err.status, err.statusText);
       alert(err);
     });
 }
@@ -90,28 +102,28 @@ const userInfo = new UserInfo(
 
 
 // new card
-function renderCard(cardData, userData) {
+function createCard(cardData) {
   const card = new Card({
     cardData,
+    templateSelector: templateSelector, //ul conatins li
     handleImagePreview,
     likePlaceCard,
     dislikePlaceCard,
     confirmDeletePlaceCard,
-    templateSelector: templateSelector, //ul conatins li
-    userData
+    userId: this._id
   });
   return card.render();
 }
 
 const cardContainer = new Section(
-  {renderer: renderCard},
+  {renderer: createCard},
   ".elements" //html section
 );
 
 // const cardContainer = new Section(
 //   {
 //     renderer: (element) => {
-//       const newCard = renderCard(element);
+//       const newCard = createCard(element);
 //       cardContainer.addItem(newCard);
 //     },
 //   },
@@ -124,19 +136,20 @@ function handleImagePreview(link, name) {
   previewImage.open(link, name);
 }
 
+//delete place-card
 const confirmDeletionPopup = new PopupConfirmDelete(
   confirmDeleteForm,
   confirmDeleteButton,
   confirmDeletePlaceCard
 );
 
-function confirmDeletePlaceCard(card, cardId) {
+function confirmDeletePlaceCard(place, cardId) {
   confirmDeletionPopup.open();
   api
     .deleteCard(cardId)
     .then(() => {
-      card.remove();
-      card = null;
+      place.remove();
+      place = null;
       confirmDeletionPopup.close();
     })
     .catch((err) => {
@@ -145,31 +158,28 @@ function confirmDeletePlaceCard(card, cardId) {
 }
 
 // like card
-function likePlaceCard() {
-  // check cardId ------------->>>>>!!!!!!
+function likePlaceCard(cardId, event, cardLikes) {
   api
-    .likeCard(like)
-    .then((card) => {
-      console.log(card.likes);
-      // like.textContent = card.likes.length;
-      // event.target.classList.add('elements__heart_active');
+    .likeCard(cardId)
+    .then(card => {
+      cardLikes.textContent = card.likes.length;
+      event.target.classList.add('elements__heart_active');
     })
     .catch((err) => {
-      console.log(err.status, err.statusText);
+      console.log("Error: ", err.status, err.statusText);
     });
 }
 
-// //dislike card
-function dislikePlaceCard() {
+//dislike card
+function dislikePlaceCard(cardId, event, cardLikes) {
   api
-    .dislikeCard(dislike)
-    .then((card) => {
-      console.log(card.likes);
-      // dislike.textContent = card.likes.length; //likes form url path
-      // event.target.classList.remove("elements__heart_active");
+    .dislikeCard(cardId)
+    .then(card => {
+      cardLikes.textContent = card.likes.length;
+      event.target.classList.remove('elements__heart_active');
     })
     .catch((err) => {
-      console.log(err.status, err.statusText);
+      console.log("Error: ", err.status, err.statusText);
     });
 }
 
@@ -204,11 +214,12 @@ addPlacePopup.setEventListeners();
 
 function submitNewPlaceForm() {
   addNewPlaceSaveButton.textContent = "Saving...";
-    api
-      .addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
+  api.getData()
+    .then(data => {
+    api.addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
       .then(
-        ((card) => {
-          cardContainer.addItem(card, userData._id);
+        (card => {
+          cardContainer.renderCards(card, data._id);
           addPlacePopup.close();
         })
           .catch((err) => {
@@ -218,6 +229,7 @@ function submitNewPlaceForm() {
             addNewPlaceSaveButton.textContent = "Create";
           })
       );
+    })
 }
 
 // update user profile-info form:
@@ -281,3 +293,7 @@ openAvatarPopupButton.addEventListener("click", () => {
   editAvatar.open();
   avatarFormValidator.disableSubmitButton();
 });
+
+window.onload = () => {
+  fetchData();
+};
