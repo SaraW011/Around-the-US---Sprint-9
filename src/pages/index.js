@@ -43,39 +43,6 @@ const api = new Api({
 //======================== load **USER ID** from server using Api 
 //name, about, avatar, id: 
 
-// Promise.all([api.getData(), api.getInitialCards()])
-//   .then(([userData, cardsData]) => {
-//     userInfo.setUserInfo({
-//       name: userData.name, 
-//       about: userData.about,
-//       id: userData._id
-//     });
-//     userInfo.setUserAvatar(userData.avatar);
-//     cardContainer.renderCards(cardsData);
-//   })
-//   .catch(err => {
-//     console.log(err);
-// });
-
-// async function fetchData() {
-//   try {
-//       const [cards, userData] = await Promise.all([api.getInitialCards(), api.getData()])
-//       if ( cards, userData ) {
-//           userInfo.setUserInfo({ 
-//             name: userData.name, 
-//             description: userData.about, 
-//             id: userData._id })
-//            userInfo.setUserAvatar(userData.avatar);
-//             cardContainer.renderCards(cards);
-//       }
-//   }
-//   catch (err) {
-//     alert(err)
-//     console.log(err);
-//   }
-// }
-// fetchData();
-
 function fetchData() {
     const user = api
     .getData()
@@ -117,7 +84,7 @@ const userInfo = new UserInfo(
   ".profile__title",
   ".profile__avatar"
 );
-//=========================================== LOAD CARD INTO SECTION
+//=========================================== RENDER CARD SECTION
 
 
 // new card
@@ -178,29 +145,25 @@ function confirmDeletePlaceCard(place, cardId) {
 }
 
 // like card
-function likePlaceCard(cardId, event, cardLikes) {
-  api
-    .likeCard(cardId)
-    .then(card => {
-      cardLikes.textContent = card.likes.length;
-      event.target.classList.add('elements__heart_active');
+function likePlaceCard(cardId) {
+  api.likeCard(cardId)
+  .then((LikeAdded) => {
+    console.log('card was liked', LikeAdded.likes);
     })
-    .catch((err) => {
-      console.log("Error: ", err.status, err.statusText);
-    });
+  .catch((err) => {
+    console.log(err);
+  }); 
 }
 
 //dislike card
-function dislikePlaceCard(cardId, event, cardLikes) {
-  api
-    .dislikeCard(cardId)
-    .then(card => {
-      cardLikes.textContent = card.likes.length;
-      event.target.classList.remove('elements__heart_active');
+function dislikePlaceCard(cardId) {
+  api.dislikeCard(cardId)
+  .then((likeRemoved) => {
+    console.log('card was disliked', likeRemoved.likes);
     })
-    .catch((err) => {
-      console.log("Error: ", err.status, err.statusText);
-    });
+  .catch((err) => {
+    console.log(err);
+  }); 
 }
 
 // **-->> FORMS <<---------------------------------------------------------------*/
