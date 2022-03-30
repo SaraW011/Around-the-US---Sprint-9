@@ -36,10 +36,7 @@ import {
 //**-->> API <<--*/
 const api = new Api({
   baseUrl: "https://around.nomoreparties.co/v1/group-12",
-  headers: {
-    authorization: "b211c19a-1dd2-41b6-b48a-d98d5e63db67",
-    "Content-Type": "application/json",
-  },
+  token: "b211c19a-1dd2-41b6-b48a-d98d5e63db67"
 });
 
 
@@ -60,16 +57,35 @@ const api = new Api({
 //     console.log(err);
 // });
 
+// async function fetchData() {
+//   try {
+//       const [cards, userData] = await Promise.all([api.getInitialCards(), api.getData()])
+//       if ( cards, userData ) {
+//           userInfo.setUserInfo({ 
+//             name: userData.name, 
+//             description: userData.about, 
+//             id: userData._id })
+//            userInfo.setUserAvatar(userData.avatar);
+//             cardContainer.renderCards(cards);
+//       }
+//   }
+//   catch (err) {
+//     alert(err)
+//     console.log(err);
+//   }
+// }
+// fetchData();
+
 function fetchData() {
-    api
+    const user = api
     .getData()
-    .then(user => {
+    .then((user) => {
       userInfo.setUserInfo({
         name: user.name, 
         about: user.about, 
         id: user._id});
       userInfo.setUserAvatar(user.avatar);
-      loadInitialCards(user._id);
+      loadInitialCards();
     })
     .catch((err) => {
       console.log(err, err.status, err.statusText);
@@ -77,6 +93,9 @@ function fetchData() {
     });
 }
 
+window.onload = () => {
+  fetchData();
+};
 
 // ======================== load CARDS from server using Api 
 
@@ -103,16 +122,17 @@ const userInfo = new UserInfo(
 
 // new card
 function createCard(cardData) {
-  const card = new Card({
+  const card = new Card(
     cardData,
-    templateSelector: templateSelector, //ul conatins li
+    //ul conatins li
     handleImagePreview,
     likePlaceCard,
     dislikePlaceCard,
     confirmDeletePlaceCard,
-    userId: this._id
-  });
-  return card.render();
+    templateSelector,
+    userInfo
+  );
+  return card.renderCardElement();
 }
 
 const cardContainer = new Section(
@@ -293,7 +313,3 @@ openAvatarPopupButton.addEventListener("click", () => {
   editAvatar.open();
   avatarFormValidator.disableSubmitButton();
 });
-
-window.onload = () => {
-  fetchData();
-};

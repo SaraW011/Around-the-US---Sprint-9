@@ -1,7 +1,9 @@
 export default class Api {  
   constructor(objectString) {  //objectString
     this._url = objectString.baseUrl;
-    this._headers = objectString.headers;
+    this._token = objectString.token;
+    this._headers = {authorization: this._token, 
+      'Content-type': 'application/json'};
   }
  
   //making a request to the server

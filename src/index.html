@@ -5,6 +5,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
 	<title>Around The U.S.</title>
+	<link rel="icon" type="image/x-icon" href="./images/favicon.ico">
 </head>
 
 <body class="root">
@@ -109,15 +110,15 @@
 		</div>
 		<!-- Cards Element Template -->
 		<template class ="elements-template">
-			<article class="elements__element">
-				<button class="elements__trash elements__trash_disabled" type="button"><img src="./images/trash.svg" alt="Delete button" /></button>
+			<li class="elements__element">
+				<button class="elements__trash elements__trash_disabled" type="button"><img src="<%=require('./images/trash.svg')%>" alt="Delete button" /></button>
 				<div class="elements__image" src="" alt="image preview"></div>
 				<div class="elements__info">
 					<h2 class="elements__text"></h2>
-					<button class="elements__heart" type="button"><img src="./images/heart.svg" alt="like heart-button" /></button>
+					<button class="elements__heart" type="button"><img src="<%=require('./images/heart.svg')%>" alt="like heart-button" /></button>
 					<div class="elements__number-of-likes">0</div>
 				</div>
-			</article>
+			</li>
 		</template>
 		<!-- <script type="module" src="./pages/index.js"></script> -->
 </body>
