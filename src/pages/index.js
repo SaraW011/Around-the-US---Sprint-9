@@ -43,8 +43,8 @@ const api = new Api({
 //======================== load **USER ID** from server using Api 
 //name, about, avatar, id: 
 
-function fetchData() {
-    const user = api
+async function fetchData() {
+    const user = await api
     .getData()
     .then((user) => {
       userInfo.setUserInfo({
@@ -66,8 +66,8 @@ window.onload = () => {
 
 // ======================== load CARDS from server using Api 
 
-function loadInitialCards() {
-  api
+async function loadInitialCards() {
+  await api
     .getInitialCards()
     .then((cards) => {
       cardContainer.renderCards(cards);
@@ -104,7 +104,7 @@ function createCard(cardData) {
 
 const cardContainer = new Section(
   {renderer: createCard},
-  ".elements" //html section
+  ".elements__list" //ul
 );
 
 // const cardContainer = new Section(

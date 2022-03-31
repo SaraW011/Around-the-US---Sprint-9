@@ -23,6 +23,9 @@ This is a continuation of previous project 8. New subjects applied:
 - [9] Updating profile picture
 - [10] Improving UX of all forms
 
+### main issue encountered in the project:
+Inability to load cards due to incorrect closing tags of newly added forms in the html file. Once tags were fixed, cards were loaded from the server.
+
 
 [Figma:](https://www.figma.com/file/xQVeb8gprjukPVKXiLXS5T/Sprint-9%3A-Applied-JavaScript?node-id=0%3A1)
 

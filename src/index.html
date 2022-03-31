@@ -1,126 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
-	<title>Around The U.S.</title>
-	<link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-</head>
-
-<body class="root">
-	<div class="page">
-		
-		<header class="header"> <a href="#" target="_blank"><img src="<%=require('./images/logo.svg')%>" class="logo" id="site-logo" alt="Around the USA logo" /></a>
-			<!-- <link rel="stylesheet" href="./pages/index.css" /> -->
-		</header>
-
-		<main class="main">
-			<!-- profile -->
-			<section class="profile">
-				<div class="profile__avatar-wrapper">
-					<img class="profile__avatar" src="<%=require('./images/avatar.jpg')%>" alt="profile avatar" />
-               <!-- <img class="profile__avatar" src="./images/avatar.jpg" alt="profile avatar" /> -->
-
-					<button type="button" aria-label="edit-avatar-button" class="profile__avatar-edit-button"> </button>
-				</div>
-				<div class="profile__info">
-					<div>
-						<h1 class="profile__name">Jacques Cousteau</h1>
-						<button aria-label="edit-button" type="button" class="profile__edit-button" name="edit"></button>
-					</div>
-					<h2 class="profile__title">Explorer</h2> </div>
-				<button type="button" aria-label="add-button" class="profile__add-button"></button>
-			</section>
-			<!-- end-profile -->
-			
-         <!-- MODAL POPUP EDIT PROFILE -->
-			<div class="modal modal_type_edit-profile">
-				<div class="modal__container">
-					<button type="button" aria-label="close-button" class="modal__close-button"></button>
-					<h3 class="modal__title">Edit Profile</h3>
-					<!-- popup form -->
-					<form action="#" class="form form-change-profile" name="edit-profile" novalidate>
-						<input id="input_type_name" type="text" class="form__input form__input_type_name" placeholder="name" name="name" minlength="2" maxlength="40" required/> <span id="input_type_name-error" class="form__error"></span>
-						<input id="input_type_job" type="text" class="form__input form__input_type_job" placeholder="profession" name="about" minlength="2" maxlength="200" required/> <span id="input_type_job-error" class="form__error"></span>
-						<button id= "edit-profile_save-button" type="submit" class="form__button form__button_disabled">Save</button>
-					</form>
-				</div>
-			</div>
-
-      </section>
-
-			<!-- MODAL POPUP ADD PLACE CARD -->
-			<div class="modal modal_type_add-place">
-				<div class="modal__container">
-					<button type="button" aria-label="close-button" class="modal__close-button"></button>
-					<h3 class="modal__title">New place</h3>
-					<!-- popup form -->
-					<form action="#" class="form form-add-place" name="form-place" novalidate>
-						<input id="input_type_place" type="text" class="form__input form__input_type_place" placeholder="Title" name="place" minlength="1" maxlength="30" required/> <span id="input_type_place-error" class="form__error"></span>
-						<input id="input_type_url" type="url" class="form__input form__input_type_link" placeholder="Image link" name="link" required/> <span id="input_type_url-error" class="form__error"></span>
-						<button id= "add-card_save-button" type="submit" class="form__button form__button_disabled">Create</button>
-					</form>
-				</div>
-			</div>
-
-			<!-- MODAL POPUP PREVIEW PLACE CARD -->
-			<div class="modal modal_type_preview-image">
-				<div class="modal__image-wrapper">
-					<button type="button" aria-label="close-button" class="modal__close-button modal__close-button_type-preview"></button>
-					<figure> <img class="modal__image-container" src=# alt="preview image">
-						<figcaption class="modal__image-caption"></figcaption>
-					</figure>
-				</div>
-			</div>
-
-			<!-- MODAL POPUP EDIT AVATAR -->
-			<div class="modal modal_type_edit-avatar">
-				<div class="modal__container">
-					<button type="button" aria-label="close-button" class="modal__close-button"></button>
-					<h3 class="modal__title">Change profile picture</h3>
-					<!-- popup form -->
-					<form action="#" class="form form-edit-avatar" name="form-edit-avatar" novalidate>
-						<input id="input_type_url" type="url" class="form__input form__input_type_link" placeholder="avatar link" name="avatr" required/> <span id="input_type_url-error" class="form__error"></span>
-						<button id = "modal__avatar-save-button" type="submit" class="form__button form__button_disabled">Save</button>
-					</form>
-				</div>
-
-			<!-- MODAL POPUP CONFIRM DELETE -->
-				<section class="modal modal_type_confirm-delete">
-					<div class="modal__container">
-						<button type="button" aria-label="close-button" class="modal__close-button"></button>
-						<h3 class="modal__title">Are you sure?</h3>
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
+      <title>Around The U.S.</title>
+   </head>
+   <body class="root">
+      <div class="page">
+         <header class="header">
+            <a href="#" target="_blank">
+            <img src="
+               <%=require('./images/logo.svg')%>" class="logo" id="site-logo" alt="Around the USA logo" />
+            </a>
+            <!-- <link rel="stylesheet" href="./pages/index.css" /> -->
+         </header>
+         <main class="main">
+            <!-- profile -->
+            <section class="profile">
+               <div class="profile__avatar-wrapper">
+                  <img class="profile__avatar" src="
+                     <%=require('./images/avatar.jpg')%>" alt="profile avatar" />
+                  <!-- <img class="profile__avatar" src="./images/avatar.jpg" alt="profile avatar" /> -->
+                  <button type="button" aria-label="edit-avatar-button" class="profile__avatar-edit-button"></button>
+               </div>
+               <div class="profile__info">
+                  <div>
+                     <h1 class="profile__name">Jacques Cousteau</h1>
+                     <button aria-label="edit-button" type="button" class="profile__edit-button" name="edit"></button>
+                  </div>
+                  <h2 class="profile__title">Explorer</h2>
+               </div>
+               <button type="button" aria-label="add-button" class="profile__add-button"></button>
+            </section>
+            <!-- end-profile -->
+            <!-- MODAL POPUP EDIT PROFILE -->
+            <div class="modal modal_type_edit-profile">
+               <div class="modal__container">
+                  <button type="button" aria-label="close-button" class="modal__close-button"></button>
+                  <h3 class="modal__title">Edit Profile</h3>
+                  <!-- form inside modal window -->
+                  <form action="#" class="form form-change-profile" name="form-profile" novalidate>
+                     <input id="input_type_name" type="text" class="form__input form__input_type_name" placeholder="name" name="name" 
+                        minlength="2" maxlength="40" required/>
+                     <span id="input_type_name-error" class="form__error"></span>
+                     <input id="input_type_job" type="text" class="form__input form__input_type_job" placeholder="profession" name="job" 
+                        minlength="2" maxlength="200" required/>
+                     <span id="input_type_job-error" class="form__error"></span>
+                     <button type="submit" class="form__button form__button_disabled">Save</button>
+                  </form>
+               </div>
+            </div>
+            <!-- MODAL POPUP ADD PLACE CARD -->
+            <div class="modal modal_type_add-place">
+               <div class="modal__container">
+                  <button type="button" aria-label="close-button" class="modal__close-button"></button>
+                  <h3 class="modal__title">New place</h3>
+                  <!-- form inside modal window -->
+                  <form action="#" class="form form-add-place" name="form-place" novalidate>
+                     <input id="input_type_place" type="text" class="form__input form__input_type_place" 
+                        placeholder="Title" name="place" minlength="1" maxlength="30" required/>
+                     <span id="input_type_place-error" class="form__error"></span>
+                     <input id="input_type_url" type="url" class="form__input form__input_type_link" 
+                        placeholder="Image link" name="link" required/>
+                     <span id="input_type_url-error" class="form__error"></span>
+                     <button type="submit" class="form__button form__button_disabled">Create</button>
+                  </form>
+               </div>
+            </div>
+            <!-- MODAL POPUP PREVIEW PLACE CARD -->
+            <div class="modal modal_type_preview-image">
+               <div class="modal__image-wrapper">
+                  <button type="button" aria-label="close-button" class="modal__close-button modal__close-button_type-preview"></button>
+                  <figure>
+                     <img class="modal__image-container" src="#" alt="preview image">
+                     <figcaption class="modal__image-caption"></figcaption>
+                  </figure>
+               </div>
+            </div>
+            <!-- MODAL POPUP CONFIRM DELETE CARD -->
+            <!-- MODAL POPUP CONFIRM DELETE -->
+            <div class="modal modal_type_confirm-delete">
+               <div class="modal__container">
+                  <button type="button" aria-label="close-button" class="modal__close-button"></button>
+                  <h3 class="modal__title">Are you sure?</h3>
                   <!-- popup form -->
-					<form action="#" class="form form-confirm-delete" name="confirm-delete" novalidate>
-						<button type="submit" aria-label="delete-button" class="form__button form__button_delete">Yes</button>
-               </form>
-					</div>
-
-
-         <section class="elements">
-				<ul class="elements__list"> </ul>
-			</section>
-			
-		</main>
-		<!-- Footer -->
-		<footer class="footer">
-			<p class="footer__copyright">© 2022. Sara Weissman</p>
-		</footer>
-		</div>
-		<!-- Cards Element Template -->
-		<template class ="elements-template">
-			<li class="elements__element">
-				<button class="elements__trash elements__trash_disabled" type="button"><img src="<%=require('./images/trash.svg')%>" alt="Delete button" /></button>
-				<div class="elements__image" src="" alt="image preview"></div>
-				<div class="elements__info">
-					<h2 class="elements__text"></h2>
-					<button class="elements__heart" type="button"><img src="<%=require('./images/heart.svg')%>" alt="like heart-button" /></button>
-					<div class="elements__number-of-likes">0</div>
-				</div>
-			</li>
-		</template>
-		<!-- <script type="module" src="./pages/index.js"></script> -->
-</body>
-
+                  <form action="#" class="form form-confirm-delete" name="confirm-delete" novalidate>
+                     <button type="submit" aria-label="delete-button" class="form__button form__button_delete">Yes</button>
+                  </form>
+               </div>
+            </div>
+            <!-- MODAL POPUP EDIT AVATAR -->
+            <div class="modal modal_type_edit-avatar">
+               <div class="modal__container">
+                  <button type="button" aria-label="close-button" class="modal__close-button"></button>
+                  <h3 class="modal__title">Change profile picture</h3>
+                  <!-- popup form -->
+                  <form action="#" class="form form-edit-avatar" name="form-edit-avatar" novalidate>
+                     <input id="input_type_url" type="url" class="form__input form__input_type_link" placeholder="avatar link" name="avatr" required/>
+                     <span id="input_type_url-error" class="form__error"></span>
+                     <button id = "modal__avatar-save-button" type="submit" class="form__button form__button_disabled">Save</button>
+                  </form>
+               </div>
+            </div>
+            <section class="elements">
+               <ul class="elements__list"></ul>
+            </section>
+         </main>
+         <!-- Footer -->
+         <footer class="footer">
+            <p class="footer__copyright">© 2022. Sara Weissman</p>
+         </footer>
+      </div>
+      <!-- Cards Element Template -->
+      <template class ="elements-template">
+         <li class="elements__element">
+            <button class="elements__trash elements__trash_disabled" type="button">
+            <img src="
+               <%=require('./images/trash.svg')%>" alt="Delete button" />
+            </button>
+            <div class="elements__image" src="" alt="image preview"></div>
+            <div class="elements__info">
+               <h2 class="elements__text"></h2>
+               <button class="elements__heart" type="button">
+               <img src="
+                  <%=require('./images/heart.svg')%>" alt="like heart-button" />
+               </button>
+               <div class="elements__number-of-likes"></div>
+            </div>
+         </li>
+      </template>
+      <!-- <script type="module" src="./pages/index.js"></script> -->
+   </body>
 </html>
