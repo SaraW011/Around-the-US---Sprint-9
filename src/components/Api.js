@@ -93,7 +93,7 @@ checkResponse = (res) => {
     const res = await fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
-      body: JSON.stringify({avatar: avatar}),
+      body: JSON.stringify(avatar),
     });
     return this.checkResponse(res);
   }

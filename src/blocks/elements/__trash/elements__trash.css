@@ -1,4 +1,5 @@
 .elements__trash {
+    background-image: url(../../../images/trash.svg);
     position: absolute;
     top: 18px;
     right: 15px;
@@ -7,9 +8,9 @@
     padding: 0;
     border: none;
     background: transparent;
+    background-size: 100%;
     cursor: pointer;
     transition: 1s ease-out;
-    z-index: 99;
 }
 
 .elements__trash:hover {
@@ -17,11 +18,6 @@
   opacity: 0.6;
 }
 
-
 .elements__trash:focus {
     outline: none;
-  }
-
-  .elements__trash_disabled {
-    display: none;
   }

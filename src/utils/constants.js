@@ -9,6 +9,7 @@ export const previewImagePopup = document.querySelector(
 export const editAvatarPopup = document.querySelector(".modal_type_edit-avatar");
 export const inputUrlForm = document.querySelector("#input_type_url");
 export const inputPlaceNameForm = document.querySelector("#input_type_place");
+export const inputAvatarPic = document.querySelector("#input_type_avatar-url");
 
 // wrapper forms
 export const placeForm = document.querySelector(".form-add-place");
@@ -21,14 +22,15 @@ export const inputName = document.querySelector(".form__input_type_name");
 export const inputJob = document.querySelector(".form__input_type_job");
 
 // buttons
-export const saveProfileEditButton = document.querySelector("#edit-profile_save-button");
+export const saveProfileEditButton = document.querySelector(".form__button_type-edit-profile");
 export const openProfileEditButton = document.querySelector(".profile__edit-button");
 export const addNewPlacePopupButton = document.querySelector(".profile__add-button");
-export const addNewPlaceSaveButton = document.querySelector("#add-card_save-button");
+export const addNewPlaceSaveButton = document.querySelector(".form__button_type-add-card");
 
+export const avatarImageSrc = document.querySelector(".profile__avatar");
 export const openAvatarPopupButton = document.querySelector(".profile__avatar-edit-button");
 export const confirmDeleteButton = document.querySelector(".form__button_delete");
-export const saveAvatarButton = document.querySelector("#modal__avatar-save-button");
+export const saveAvatarButton = document.querySelector(".form__button_type-change-avatar");
 
 
 // place - elements - template

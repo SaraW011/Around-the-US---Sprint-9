@@ -20,7 +20,7 @@ export default class UserInfo {
     this._userId = id;
   }
 
-  setUserAvatar(avatar){
-    this._avatar.src = avatar;
+  setUserAvatar(image) {
+    this._avatar.style.backgroundImage = image;
   }
 }

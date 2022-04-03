@@ -2,9 +2,11 @@
     height: 120px;
     width: 120px;
     background-image: url(../../../images/pencil-edit-icon.svg);
+    background-size: 26px 26px;
     background-repeat: no-repeat;
     background-position: center;
     position: absolute;
+    border-radius: 100%;
     border-width: 0;
     background-color: rgba(0, 0, 0, 0.6);
     padding: 0;

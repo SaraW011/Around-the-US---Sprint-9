@@ -6,7 +6,6 @@ export default class PopupWithImage extends Popup {
   }
 
   open(link, name) {
-    super.open();
     this._link = link;
     this._name = name;
     this._popup.querySelector(".modal__image-caption").textContent = this._name; //define in constructor
@@ -15,5 +14,7 @@ export default class PopupWithImage extends Popup {
     const imagePreview = this._popup.querySelector(".modal__image-container"); //define in constructor
     imagePreview.src = this._link;
     imagePreview.alt = this._name;
+
+        super.open();
   }
 }

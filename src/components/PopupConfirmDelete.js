@@ -7,9 +7,9 @@ export default class PopupConfirmDelete extends Popup {
     this._submitFormDelete = submitFormDelete;
   }
 
-  handleConfirmDelete = (e, card, cardId) => {
+  handleConfirmDelete(cardId, e){
     e.preventDefault();
-    this._submitFormDelete(card, cardId);
+    this._submitFormDelete = cardId;
     this.close();
   };
 

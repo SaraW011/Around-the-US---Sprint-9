@@ -21,6 +21,7 @@ import {
   inputName,
   inputJob,
   inputUrlForm,
+  inputAvatarPic,
   inputPlaceNameForm,
   openProfileEditButton,
   saveProfileEditButton,
@@ -36,46 +37,46 @@ import {
 //**-->> API <<--*/
 const api = new Api({
   baseUrl: "https://around.nomoreparties.co/v1/group-12",
-  token: "b211c19a-1dd2-41b6-b48a-d98d5e63db67"
+  token: "b211c19a-1dd2-41b6-b48a-d98d5e63db67",
 });
 
-
-//======================== load **USER ID** from server using Api 
-//name, about, avatar, id: 
+//======================== fetch **USER ID** from server using Api
+//name, about, avatar, id:
 
 async function fetchData() {
-    const user = await api
-    .getData()
-    .then((user) => {
+  try {
+    const userid = await api.getData();
+    if (userid) {
       userInfo.setUserInfo({
-        name: user.name, 
-        about: user.about, 
-        id: user._id});
-      userInfo.setUserAvatar(user.avatar);
+        name: userid.name,
+        about: userid.about,
+        id: userid._id,
+      })
+      userInfo.setUserAvatar(userid.avatar);
       loadInitialCards();
-    })
-    .catch((err) => {
-      console.log(err, err.status, err.statusText);
-      alert(err);
-    });
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  }
 }
 
 window.onload = () => {
   fetchData();
 };
 
-// ======================== load CARDS from server using Api 
+// ======================== fetch CARDS from server using Api
 
 async function loadInitialCards() {
-  await api
-    .getInitialCards()
-    .then((cards) => {
+  try {
+    const cards = await api.getInitialCards();
+    if (cards) {
       cardContainer.renderCards(cards);
-    })
-    .catch((err) => {
-      console.log(err, err.status, err.statusText);
-      alert(err);
-    });
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  }
 }
 //================================================= MY INFO
 
@@ -86,16 +87,14 @@ const userInfo = new UserInfo(
 );
 //=========================================== RENDER CARD SECTION
 
-
 // new card
 function createCard(cardData) {
   const card = new Card(
     cardData,
-    //ul conatins li
-    handleImagePreview,
+    previewPlaceCard,
     likePlaceCard,
     dislikePlaceCard,
-    confirmDeletePlaceCard,
+    handleDeleteCard,
     templateSelector,
     userInfo
   );
@@ -103,7 +102,7 @@ function createCard(cardData) {
 }
 
 const cardContainer = new Section(
-  {renderer: createCard},
+  { renderer: createCard },
   ".elements__list" //ul
 );
 
@@ -119,121 +118,124 @@ const cardContainer = new Section(
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
 
-function handleImagePreview(link, name) {
-  previewImage.open(link, name);
-}
-
 //delete place-card
 const confirmDeletionPopup = new PopupConfirmDelete(
   confirmDeleteForm,
-  confirmDeleteButton,
-  confirmDeletePlaceCard
+  handleDeleteCard
 );
+confirmDeletionPopup.setEventListeners();
 
-function confirmDeletePlaceCard(place, cardId) {
+async function handleDeleteCard(cardId) {
   confirmDeletionPopup.open();
-  api
-    .deleteCard(cardId)
-    .then(() => {
+  confirmDeletionPopup.handleConfirmDelete() //?????????????..........>>>>>>
+  try {
+    const deleteCard = await api.deleteCard(cardId);
+    if (deleteCard) {
       place.remove();
       place = null;
-      confirmDeletionPopup.close();
-    })
-    .catch((err) => {
-      console.log(err.status, err.statusText);
-    });
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  } finally {
+    confirmDeletionPopup.close("Yes");
+  }
 }
 
 // like card
-function likePlaceCard(cardId) {
-  api.likeCard(cardId)
-  .then((LikeAdded) => {
-    console.log('card was liked', LikeAdded.likes);
-    })
-  .catch((err) => {
-    console.log(err);
-  }); 
+async function likePlaceCard(card) {
+  try {
+    const addLike = await api.likeCard(card);
+    if (addLike) {
+      return addLike.likes;
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  }
 }
 
-//dislike card
-function dislikePlaceCard(cardId) {
-  api.dislikeCard(cardId)
-  .then((likeRemoved) => {
-    console.log('card was disliked', likeRemoved.likes);
-    })
-  .catch((err) => {
-    console.log(err);
-  }); 
+// dislike card
+
+async function dislikePlaceCard(card) {
+  try {
+    const dislikeCard = await api.dislikeCard(card);
+    if (dislikeCard) {
+      return dislikeCard.likes;
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  }
 }
 
 // **-->> FORMS <<---------------------------------------------------------------*/
 // Project 9: all forms submitted are now linked to api and have promise chains:
 
 //edit avatar form -----------------------------------------------
-const editAvatar = new PopupWithForm(editAvatarPopup, editAvatarForm);
-editAvatar.setEventListeners();
+const changeAvatarForm = new PopupWithForm(editAvatarPopup, editAvatarForm);
+changeAvatarForm.setEventListeners();
 
-function editAvatarForm(event) {
-  event.preventDefault();
+async function editAvatarForm() {
   saveAvatarButton.textContent = "saving...";
-  api
-    .editAvatar(inputUrlForm.value)
-    .then((user) => {
-      // might need to put into object brackets
-      userInfo.setUserAvatar(user.avatar);
-      editAvatarPopup.close();
-    })
-    .catch((err) => {
-      console.log(err.status, err.statusText);
-    })
-    .finally(() => {
-      saveAvatarButton.textContent = "Save";
-    });
+  try {
+    const saveNewAvatar = await api.editAvatar(inputAvatarPic.value);
+    if (saveNewAvatar) {
+      userInfo.setUserAvatar(avatar);
+      changeAvatarForm.close();
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  } finally {
+    saveAvatarButton.textContent = "Save";
+  }
 }
 
-// add new place-card form --------------------------------------
+// add new place-card form:
 const addPlacePopup = new PopupWithForm(addNewPlacePopup, submitNewPlaceForm);
 addPlacePopup.setEventListeners();
 
-function submitNewPlaceForm() {
+async function submitNewPlaceForm() {
   addNewPlaceSaveButton.textContent = "Saving...";
-  api.getData()
-    .then(data => {
-    api.addPlaceCard(inputPlaceNameForm.value, inputUrlForm.value) // might need to spesify url for each form?????
-      .then(
-        (card => {
-          cardContainer.renderCards(card, data._id);
-          addPlacePopup.close();
-        })
-          .catch((err) => {
-            console.log(err.status, err.statusText);
-          })
-          .finally(() => {
-            addNewPlaceSaveButton.textContent = "Create";
-          })
-      );
-    })
+  try {
+    const newPlaceCard = await api.addPlaceCard(
+      inputPlaceNameForm.value,
+      inputUrlForm.value
+    );
+    const newCardElement = createCard(newPlaceCard);
+    cardContainer.addItem(newCardElement);
+    addPlacePopup.close();
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  } finally {
+    addNewPlaceSaveButton.textContent = "Create";
+  }
 }
 
 // update user profile-info form:
 const profileModal = new PopupWithForm(editProfilePopup, submitProfileForm);
 profileModal.setEventListeners();
 
-function submitProfileForm(event, inputs) {
-  event.preventDefault();
+async function submitProfileForm() {
   saveProfileEditButton.textContent = "Saving...";
-  api
-    .editUserInfo(inputs.name, inputs.about) //html inputs
-    .then((user) => {
-      userInfo.setUserInfo({name: user.name, about: user.about, id:user._id});
+  try {
+    const userValues = await api.editUserInfo(inputName.value, inputJob.value); //html inputs
+    if (userValues) {
+      userInfo.setUserInfo({
+        name: userValues.name,
+        about: userValues.about,
+        id: userValues._id,
+      });
       profileModal.close();
-    })
-    .catch((err) => {
-      console.log(err.status, err.statusText);
-    })
-    .finally(() => {
-      saveProfileEditButton.textContent = "Save";
-    });
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  } finally {
+    saveProfileEditButton.textContent = "Save";
+  }
 }
 
 //---->>>>>>  holds initial values inside profile form when open:
@@ -248,6 +250,10 @@ function currentProfileName() {
 //preview image:
 const previewImage = new PopupWithImage(previewImagePopup);
 previewImage.setEventListeners();
+
+function previewPlaceCard(link, text) {
+  previewImage.open(link, text);
+}
 
 //**-->> ENABLE FORM VALIDATION <<--*/
 
@@ -273,6 +279,6 @@ addNewPlacePopupButton.addEventListener("click", () => {
 });
 
 openAvatarPopupButton.addEventListener("click", () => {
-  editAvatar.open();
+  changeAvatarForm.open();
   avatarFormValidator.disableSubmitButton();
 });

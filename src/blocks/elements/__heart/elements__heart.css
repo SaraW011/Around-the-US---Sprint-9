@@ -1,9 +1,11 @@
 .elements__heart {
+  background-image: url(../../../images/heart.svg);
+  background-size: cover;
   height: 19px;
   width: 21px;
   align-self: center;
   padding: 0;
-  border: none;
+  border: 0 ;
   background: none;
   cursor: pointer;
   transition: 1s ease-out;
