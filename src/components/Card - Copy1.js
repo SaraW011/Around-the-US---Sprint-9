@@ -1,6 +1,6 @@
 export default class Card {
   constructor(
-    cardData, imagePreview, likeImage, dislikeImage, confirmDelete,
+    cardData, imagePreview, likeImage, dislikeImage, confirmDeletePopup,
     templateSelector, //main template
     userData
   ) {
@@ -14,7 +14,7 @@ export default class Card {
     this._imagePreview = imagePreview;
     this._likeImage = likeImage;
     this._dislikeImage = dislikeImage;
-    this._confirmDelete = confirmDelete;
+    this._confirmDeletePopup = confirmDeletePopup;
 
     this._likes = cardData.likes;
     // this._likesNum = cardData.likes.length;
@@ -48,34 +48,40 @@ export default class Card {
   // }
 
     //method like project 9:
-
   _countLikeNum() {
-  if (this._likes.length == 0) {
+  if (this._likes.length < 1) {
     this._likeNum.textContent = "0";
   } else {
     this._likeNum.textContent = this._likes.length;
+    this._likeNum.style.display = 'block'
 }
 }
 
-_checkInitialLike() {
-  const isLiked = this._likes.some(user => user._id === this._userData)
-  if (isLiked) {
-    this.updateLike(this._likes);
-    // this._btnLike.classList.add('elements__heart_active');
-  }
-}
+// _updateLikeNumber() {
+//   this._likes.forEach((cardElement) => {
+//     if (cardElement._id === this._userData) {
+//       this._btnLike.classList.add('elements__heart_active');
+//     }
+//   });
+// }
 
-  _confirmDeleteCard() {
+  _confirmDeletePopupCard() {
     this._cardElement.remove();
     this._cardElement = null;
   }
 
   // //only owner can remove card
   _ownerDeleteCard() {
-    if (this._ownerId !== this._userData._id) {
+    if (this._ownerId !== this._userData) {
        this._btnDelete.style.display = "none";
     }
   }
+
+
+
+  
+
+
 
   //================================================ LISTENERS
 
@@ -83,7 +89,7 @@ _checkInitialLike() {
     // card likes
 
     this._btnLike.addEventListener("click", async (event) => {
-      // this._handleLikeImage()
+      this._handleLikeImage()
       if (!this._btnLike.classList.contains('elements__heart_active')) {
         try {
           const likes = await this._likeImage(this._cardId);
@@ -103,8 +109,8 @@ _checkInitialLike() {
           if (likes) {
             event.target.classList.remove('elements__heart_active');
             this._likeNum.textContent = likes.length;
-            if (likes.length == 0) {
-              this._likeNum.textContent = "0";
+            if (likes.length === 0) {
+              this._likeNum.style.display = 'none';
             }
           }
         }
@@ -113,11 +119,24 @@ _checkInitialLike() {
           console.log(err);
         }
       }
+
+
+      // if (this._likeImage) {
+      //       event.target.classList.add('elements__heart_active');
+      //       this._likeNum.textContent = likes.length;
+      //       this._likeNum.style.display = 'block';
+      // } else {
+      //     if(this._dislikeImage)
+      //   {
+      //       event.target.classList.remove('elements__heart_active');
+      //       this._likeNum.textContent = likes.length;
+      //   }
+      // }
     });
 
     //delete card
     this._btnDelete.addEventListener("click", () => {
-      this._confirmDeleteCard();
+      this._confirmDeletePopup(this._cardElement, this._cardId);
     });
 
     //preview image
@@ -134,11 +153,9 @@ _checkInitialLike() {
     this._cardImage.style.backgroundImage = `url(${this._link})`;
     this._btnLike.textContent = this._likesNum;
     this._countLikeNum();
-    this._ownerDeleteCard();
+    // this. _updateLikeNumber()
+    // this._ownerDeleteCard();
     this._setEventListeners();
-    this._checkInitialLike()
-    // this._updateLike()
-
     return this._cardElement;
   }
 }

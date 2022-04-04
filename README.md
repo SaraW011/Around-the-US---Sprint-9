@@ -27,7 +27,7 @@ This is a continuation of previous project 8. New subjects applied:
 Inability to load cards due to incorrect closing tags of newly added forms in the html file. Once tags were fixed, cards were loaded from the server.
 
 
-[Figma:](https://www.figma.com/file/xQVeb8gprjukPVKXiLXS5T/Sprint-9%3A-Applied-JavaScript?node-id=0%3A1)
+[Link to Figma](https://www.figma.com/file/xQVeb8gprjukPVKXiLXS5T/Sprint-9%3A-Applied-JavaScript?node-id=0%3A1)
 
 The project can be viewed locally (on the desktop) using a local server.
 

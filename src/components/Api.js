@@ -89,11 +89,11 @@ checkResponse = (res) => {
   }
 
   // 9. Updating profile picture
-  async editAvatar(avatar) {
+  async editAvatar(link) {
     const res = await fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
-      body: JSON.stringify(avatar),
+      body: JSON.stringify({avatar: link}),
     });
     return this.checkResponse(res);
   }

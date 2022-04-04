@@ -10,10 +10,14 @@ import Section from "../components/Section.js";
 import UserInfo from "../components/UserInfo.js";
 
 import {
+  userProfileName,
+  userProfileTitle,
+  userProfileAvatar,
   editProfilePopup,
   addNewPlacePopup,
   previewImagePopup,
   editAvatarPopup,
+  deletePopup,
   confirmDeleteForm,
   placeForm,
   profileForm,
@@ -50,10 +54,9 @@ async function fetchData() {
       userInfo.setUserInfo({
         name: userid.name,
         about: userid.about,
-        id: userid._id,
       })
       userInfo.setUserAvatar(userid.avatar);
-      loadInitialCards();
+      loadInitialCards(userid._id);
     }
   } catch (err) {
     console.log(err, err.status, err.statusText, err.stack);
@@ -81,9 +84,9 @@ async function loadInitialCards() {
 //================================================= MY INFO
 
 const userInfo = new UserInfo(
-  ".profile__name",
-  ".profile__title",
-  ".profile__avatar"
+  userProfileName,
+  userProfileTitle,
+  userProfileAvatar
 );
 //=========================================== RENDER CARD SECTION
 
@@ -120,26 +123,25 @@ const cardContainer = new Section(
 
 //delete place-card
 const confirmDeletionPopup = new PopupConfirmDelete(
-  confirmDeleteForm,
+  deletePopup,
   handleDeleteCard
 );
 confirmDeletionPopup.setEventListeners();
 
-async function handleDeleteCard(cardId) {
+async function handleDeleteCard(place, cardId) {
   confirmDeletionPopup.open();
-  confirmDeletionPopup.handleConfirmDelete() //?????????????..........>>>>>>
-  try {
-    const deleteCard = await api.deleteCard(cardId);
-    if (deleteCard) {
-      place.remove();
-      place = null;
+    try {
+      const deleteCard = await api.deleteCard(cardId);
+      if (deleteCard) {
+        place.remove();
+        place = null;
+      }
+    } catch (err) {
+      console.log(err, err.status, err.statusText, err.stack);
+      alert(err);
+    } finally {
+      confirmDeletionPopup.close("Yes");
     }
-  } catch (err) {
-    console.log(err, err.status, err.statusText, err.stack);
-    alert(err);
-  } finally {
-    confirmDeletionPopup.close("Yes");
-  }
 }
 
 // like card
@@ -177,11 +179,11 @@ const changeAvatarForm = new PopupWithForm(editAvatarPopup, editAvatarForm);
 changeAvatarForm.setEventListeners();
 
 async function editAvatarForm() {
-  saveAvatarButton.textContent = "saving...";
   try {
+    saveAvatarButton.textContent = "saving...";
     const saveNewAvatar = await api.editAvatar(inputAvatarPic.value);
     if (saveNewAvatar) {
-      userInfo.setUserAvatar(avatar);
+      userInfo.setUserAvatar(saveNewAvatar.avatar);
       changeAvatarForm.close();
     }
   } catch (err) {
