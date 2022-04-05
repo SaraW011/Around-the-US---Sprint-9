@@ -18,7 +18,6 @@ import {
   previewImagePopup,
   editAvatarPopup,
   deletePopup,
-  confirmDeleteForm,
   placeForm,
   profileForm,
   avatarForm,
@@ -37,6 +36,7 @@ import {
   templateSelector,
   formFieldset,
 } from "../utils/constants.js";
+import { async } from "regenerator-runtime/runtime";
 
 //**-->> API <<--*/
 const api = new Api({
@@ -49,14 +49,14 @@ const api = new Api({
 
 async function fetchData() {
   try {
-    const userid = await api.getData();
-    if (userid) {
+    const userId = await api.getData();
+    if (userId) {
       userInfo.setUserInfo({
-        name: userid.name,
-        about: userid.about,
-      })
-      userInfo.setUserAvatar(userid.avatar);
-      loadInitialCards(userid._id);
+        name: userId.name,
+        about: userId.about,
+      });
+      userInfo.setUserAvatar(userId.avatar);
+      loadInitialCards(userId._id);
     }
   } catch (err) {
     console.log(err, err.status, err.statusText, err.stack);
@@ -121,29 +121,6 @@ const cardContainer = new Section(
 
 //**-->> CARD FUNCTIONS <<----------------------------------*/
 
-//delete place-card
-const confirmDeletionPopup = new PopupConfirmDelete(
-  deletePopup,
-  handleDeleteCard
-);
-confirmDeletionPopup.setEventListeners();
-
-async function handleDeleteCard(place, cardId) {
-  confirmDeletionPopup.open();
-    try {
-      const deleteCard = await api.deleteCard(cardId);
-      if (deleteCard) {
-        place.remove();
-        place = null;
-      }
-    } catch (err) {
-      console.log(err, err.status, err.statusText, err.stack);
-      alert(err);
-    } finally {
-      confirmDeletionPopup.close("Yes");
-    }
-}
-
 // like card
 async function likePlaceCard(card) {
   try {
@@ -174,24 +151,33 @@ async function dislikePlaceCard(card) {
 // **-->> FORMS <<---------------------------------------------------------------*/
 // Project 9: all forms submitted are now linked to api and have promise chains:
 
-//edit avatar form -----------------------------------------------
-const changeAvatarForm = new PopupWithForm(editAvatarPopup, editAvatarForm);
-changeAvatarForm.setEventListeners();
+//delete place-card
+const confirmDeletionPopup = new PopupConfirmDelete(
+  deletePopup,
+  confirmDeleteButton,
+  handleDeleteCard
+);
+confirmDeletionPopup.setEventListeners();
 
-async function editAvatarForm() {
-  try {
-    saveAvatarButton.textContent = "saving...";
-    const saveNewAvatar = await api.editAvatar(inputAvatarPic.value);
-    if (saveNewAvatar) {
-      userInfo.setUserAvatar(saveNewAvatar.avatar);
-      changeAvatarForm.close();
+function handleDeleteCard(cardImage, cardId) {
+  confirmDeletionPopup.open();
+  confirmDeletionPopup.handleSubmitDelete(async () => {
+  confirmDeleteButton.textContent = "Deleting...";
+    try {
+      const deleteCard = await api.deleteCard(cardId);
+      if (deleteCard) {
+        cardImage.remove();
+        cardImage = null;
+        confirmDeletionPopup.close();
+      }
+    } catch (err) {
+      console.log(err, err.status, err.statusText, err.stack);
+      alert(err);
     }
-  } catch (err) {
-    console.log(err, err.status, err.statusText, err.stack);
-    alert(err);
-  } finally {
-    saveAvatarButton.textContent = "Save";
-  }
+    finally {
+      confirmDeleteButton.textContent = "Yes";
+    }
+  });
 }
 
 // add new place-card form:
@@ -213,6 +199,26 @@ async function submitNewPlaceForm() {
     alert(err);
   } finally {
     addNewPlaceSaveButton.textContent = "Create";
+  }
+}
+
+//edit avatar form -----------------------------------------------
+const changeAvatarForm = new PopupWithForm(editAvatarPopup, editAvatarForm);
+changeAvatarForm.setEventListeners();
+
+async function editAvatarForm() {
+  try {
+    saveAvatarButton.textContent = "saving...";
+    const saveNewAvatar = await api.editAvatar(inputAvatarPic.value);
+    if (saveNewAvatar) {
+      userInfo.setUserAvatar(saveNewAvatar.avatar);
+      changeAvatarForm.close();
+    }
+  } catch (err) {
+    console.log(err, err.status, err.statusText, err.stack);
+    alert(err);
+  } finally {
+    saveAvatarButton.textContent = "Save";
   }
 }
 

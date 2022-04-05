@@ -25,7 +25,6 @@ export const inputAvatarPic = document.querySelector("#input_type_avatar-url");
 export const placeForm = document.querySelector(".form-add-place");
 export const profileForm = document.querySelector(".form-change-profile");
 export const avatarForm = document.querySelector(".form-edit-avatar");
-export const confirmDeleteForm = document.querySelector(".form-confirm-delete");
 
 // input data fields in forms
 export const inputName = document.querySelector(".form__input_type_name");
