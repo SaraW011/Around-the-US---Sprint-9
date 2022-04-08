@@ -26,7 +26,6 @@ export default class Card {
 
     this._myId = userData._profileId;
 
-
     //=================================== SELECTORS
     this._cardElement = templateSelector
       .querySelector(".elements__element")
@@ -44,22 +43,13 @@ export default class Card {
   //=================================== METHODS
 
   //method like project 9:
-
-  _countLikeNum() {
-    if (this._likes.length == 0) {
-      this._likeNum.textContent = "0";
-    } else {
-      this._likeNum.textContent = this._likes.length;
-    }
-  }
-
   _checkMyLikes() {
-    this._likes.forEach(element => {
-        if (element._id === this._myId) {
-            this._btnLike.classList.add('elements__heart_active');
-        }
+    this._likes.forEach((element) => {
+      if (element._id === this._myId) {
+        this._btnLike.classList.add("elements__heart_active");
+      }
     });
-}
+  }
 
   _deleteByOwner() {
     if (this._ownerId === this._myId) {
@@ -116,10 +106,9 @@ export default class Card {
   renderCardElement() {
     this._cardName.textContent = this._name;
     this._cardImage.style.backgroundImage = `url(${this._link})`;
-    this._btnLike.textContent = this._likesNum;
+    this._likeNum.textContent = this._likes.length;
 
     this._deleteByOwner();
-    this._countLikeNum();
     this._checkMyLikes();
     this._setEventListeners();
 

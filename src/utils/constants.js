@@ -9,17 +9,10 @@ export const previewImagePopup = document.querySelector(
 export const editAvatarPopup = document.querySelector(".modal_type_edit-avatar");
 export const deletePopup = document.querySelector(".modal_type_confirm-delete");
 
-
 //user
 export const userProfileName = document.querySelector(".profile__name");
 export const userProfileTitle = document.querySelector(".profile__title");
 export const userProfileAvatar = document.querySelector(".profile__avatar");
-
-
-//forms
-export const inputUrlForm = document.querySelector("#input_type_url");
-export const inputPlaceNameForm = document.querySelector("#input_type_place");
-export const inputAvatarPic = document.querySelector("#input_type_avatar-url");
 
 // wrapper forms
 export const placeForm = document.querySelector(".form-add-place");

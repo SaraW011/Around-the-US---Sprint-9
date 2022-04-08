@@ -23,9 +23,6 @@ import {
   avatarForm,
   inputName,
   inputJob,
-  inputUrlForm,
-  inputAvatarPic,
-  inputPlaceNameForm,
   openProfileEditButton,
   saveProfileEditButton,
   addNewPlacePopupButton,
@@ -54,7 +51,7 @@ async function fetchData() {
       userInfo.setUserInfo({
         name: userId.name,
         about: userId.about,
-        id: userId._id
+        id: userId._id,
       });
       userInfo.setUserAvatar(userId.avatar);
       loadInitialCards();
@@ -110,16 +107,6 @@ const cardContainer = new Section(
   ".elements__list" //ul
 );
 
-// const cardContainer = new Section(
-//   {
-//     renderer: (element) => {
-//       const newCard = createCard(element);
-//       cardContainer.addItem(newCard);
-//     },
-//   },
-//   ".elements"
-// );
-
 //**-->> CARD FUNCTIONS <<----------------------------------*/
 
 // like card
@@ -163,7 +150,7 @@ confirmDeletionPopup.setEventListeners();
 function handleDeleteCard(cardImage, cardId) {
   confirmDeletionPopup.open();
   confirmDeletionPopup.handleSubmitDelete(async () => {
-  confirmDeleteButton.textContent = "Deleting...";
+    confirmDeleteButton.textContent = "Deleting...";
     try {
       const deleteCard = await api.deleteCard(cardId);
       if (deleteCard) {
@@ -174,8 +161,7 @@ function handleDeleteCard(cardImage, cardId) {
     } catch (err) {
       console.log(err, err.status, err.statusText, err.stack);
       alert(err);
-    }
-    finally {
+    } finally {
       confirmDeleteButton.textContent = "Yes";
     }
   });
@@ -185,19 +171,16 @@ function handleDeleteCard(cardImage, cardId) {
 const addPlacePopup = new PopupWithForm(addNewPlacePopup, submitNewPlaceForm);
 addPlacePopup.setEventListeners();
 
-async function submitNewPlaceForm(user, data) {
+async function submitNewPlaceForm(user) {
   addNewPlaceSaveButton.textContent = "Saving...";
   try {
     const newPlaceCard = await api.addPlaceCard(
       //Only method _getInputValues collects data inputs,
-//use the collected data rather than the inputs:
-
-          //html input "name" values
-
-      inputPlaceNameForm.value,
-      inputUrlForm.value
-      // { name: data.place, link: data.link }
-
+      //use the collected data rather than the inputs:
+      // inputPlaceNameForm.value,
+      // inputUrlForm.value
+      user.place,
+      user.link //html input "name" values
     );
     const newCardElement = createCard(newPlaceCard);
     cardContainer.addItem(newCardElement, user._id);
@@ -214,10 +197,12 @@ async function submitNewPlaceForm(user, data) {
 const changeAvatarForm = new PopupWithForm(editAvatarPopup, editAvatarForm);
 changeAvatarForm.setEventListeners();
 
-async function editAvatarForm() {
+async function editAvatarForm(data) {
   try {
     saveAvatarButton.textContent = "saving...";
-    const saveNewAvatar = await api.editAvatar(inputAvatarPic.value);
+    // const saveNewAvatar = await api.editAvatar(inputAvatarPic.value);
+    const saveNewAvatar = await api.editAvatar(data.link); //html input
+
     if (saveNewAvatar) {
       userInfo.setUserAvatar(saveNewAvatar.avatar);
       changeAvatarForm.close();
@@ -255,7 +240,7 @@ async function submitProfileForm() {
 }
 
 //---->>>>>>  holds initial values inside profile form when open:
-function currentProfileName() {
+function fillProfileInputs() {
   //-----get data from UserInfo class:
   const inputData = userInfo.getUserInfo();
   inputName.value = inputData.name;
@@ -272,6 +257,13 @@ function previewPlaceCard(link, text) {
 }
 
 //**-->> ENABLE FORM VALIDATION <<--*/
+//to improve:
+// make instances of validators universall,
+// by storing all inside one object:
+//--  const formValidators = {} --
+// then create array for each form element...
+// now you can use them for disabling buttons or clearing errors:
+// formValidators['profile-form'].resetValidation()
 
 const placeFormValidator = new FormValidator(formFieldset, placeForm);
 placeFormValidator.enableValidation();
@@ -286,7 +278,7 @@ avatarFormValidator.enableValidation();
 
 openProfileEditButton.addEventListener("click", () => {
   profileModal.open();
-  currentProfileName();
+  fillProfileInputs();
 });
 
 addNewPlacePopupButton.addEventListener("click", () => {

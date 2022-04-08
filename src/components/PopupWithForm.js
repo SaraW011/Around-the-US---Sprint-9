@@ -10,7 +10,7 @@ export default class PopupWithForm extends Popup {
     this._inputList = [...this._form.querySelectorAll(".form__input")];
   }
 
-  _getInputValues() {
+  getInputValues() {
     this._inputList.forEach(input => {
       this._inputFieldValues[input.name] = input.value;
     });
@@ -19,7 +19,7 @@ export default class PopupWithForm extends Popup {
 
   handleFormSubmit = (e) => {
     e.preventDefault();
-    const newCardInput = this._handleFormSubmit(this._getInputValues());
+    const newCardInput = this._handleFormSubmit(this.getInputValues());
     return newCardInput;
   };
 
@@ -28,8 +28,7 @@ export default class PopupWithForm extends Popup {
     this._form.addEventListener("submit", this.handleFormSubmit);
   } 
 
-  close(text = 'Save') {
-    this._button.textContent = text;
+  close() {
     super.close();
     this._form.reset();
   }
