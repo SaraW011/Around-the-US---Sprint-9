@@ -24,6 +24,9 @@ export default class Card {
     this._ownerId = cardData.owner._id;
     this._userData = userData;
 
+    this._myId = userData._profileId;
+
+
     //=================================== SELECTORS
     this._cardElement = templateSelector
       .querySelector(".elements__element")
@@ -50,9 +53,17 @@ export default class Card {
     }
   }
 
+  _checkMyLikes() {
+    this._likes.forEach(element => {
+        if (element._id === this._myId) {
+            this._btnLike.classList.add('elements__heart_active');
+        }
+    });
+}
+
   _deleteByOwner() {
-    if (this._ownerId === this._userData) {
-      this._btnDelete.classList.remove(".elements__trash_disabled");
+    if (this._ownerId === this._myId) {
+      this._btnDelete.classList.remove("elements__trash_disabled");
     }
   }
 
@@ -109,6 +120,7 @@ export default class Card {
 
     this._deleteByOwner();
     this._countLikeNum();
+    this._checkMyLikes();
     this._setEventListeners();
 
     return this._cardElement;

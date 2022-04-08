@@ -54,9 +54,10 @@ async function fetchData() {
       userInfo.setUserInfo({
         name: userId.name,
         about: userId.about,
+        id: userId._id
       });
       userInfo.setUserAvatar(userId.avatar);
-      loadInitialCards(userId._id);
+      loadInitialCards();
     }
   } catch (err) {
     console.log(err, err.status, err.statusText, err.stack);
@@ -184,15 +185,22 @@ function handleDeleteCard(cardImage, cardId) {
 const addPlacePopup = new PopupWithForm(addNewPlacePopup, submitNewPlaceForm);
 addPlacePopup.setEventListeners();
 
-async function submitNewPlaceForm() {
+async function submitNewPlaceForm(user, data) {
   addNewPlaceSaveButton.textContent = "Saving...";
   try {
     const newPlaceCard = await api.addPlaceCard(
+      //Only method _getInputValues collects data inputs,
+//use the collected data rather than the inputs:
+
+          //html input "name" values
+
       inputPlaceNameForm.value,
       inputUrlForm.value
+      // { name: data.place, link: data.link }
+
     );
     const newCardElement = createCard(newPlaceCard);
-    cardContainer.addItem(newCardElement);
+    cardContainer.addItem(newCardElement, user._id);
     addPlacePopup.close();
   } catch (err) {
     console.log(err, err.status, err.statusText, err.stack);
