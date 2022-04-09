@@ -48,15 +48,12 @@ export default class FormValidator {
   }
 
   //disable submit button after initial submit:
-
-  disableSubmitButton() {
+  _disableSubmitButton() {
     this._buttonElement.classList.add(this._inactiveButtonClass);
     this._buttonElement.disabled = true;
   }
 
   // toggle button state after checking validity
-  // -->(!) improve: consider method resetValidation() for clearing errors
-
   _toggleButtonState(inputList) {
     if (this._getInvalidInput(inputList)) {
       this.disableSubmitButton();
@@ -82,8 +79,17 @@ export default class FormValidator {
     });
   }
 
-  //Enable validation for all forms:
+  //method resetValidation() for clearing errors:
+  resetValidation() {
+    // this._toggleButtonState(); //<== controlling the submit button ==
+    this._disableSubmitButton();
 
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement); // <== clearing errors ==
+    });
+  }
+
+  //Enable validation for all forms:
   enableValidation() {
     this._formElement.addEventListener("submit", function (e) {
       e.preventDefault();

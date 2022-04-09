@@ -212,7 +212,8 @@ async function editAvatarForm(data) {
     alert(err);
   } finally {
     saveAvatarButton.textContent = "Save";
-  }
+// consider method renderLoading()  
+}
 }
 
 // update user profile-info form:
@@ -262,7 +263,7 @@ function previewPlaceCard(link, text) {
 // by storing all inside one object:
 //--  const formValidators = {} --
 // then create array for each form element...
-// now you can use them for disabling buttons or clearing errors:
+//>> now use them for disabling buttons or clearing errors:
 // formValidators['profile-form'].resetValidation()
 
 const placeFormValidator = new FormValidator(formFieldset, placeForm);
@@ -275,18 +276,20 @@ const avatarFormValidator = new FormValidator(formFieldset, avatarForm);
 avatarFormValidator.enableValidation();
 
 // **-->> EVENT LISTENERS <<--*/
+//need improve with method resetValidation:
 
 openProfileEditButton.addEventListener("click", () => {
   profileModal.open();
   fillProfileInputs();
+  openProfileEditButton.resetValidation()
 });
 
 addNewPlacePopupButton.addEventListener("click", () => {
   addPlacePopup.open();
-  placeFormValidator.disableSubmitButton();
+  placeFormValidator.resetValidation();
 });
 
 openAvatarPopupButton.addEventListener("click", () => {
   changeAvatarForm.open();
-  avatarFormValidator.disableSubmitButton();
+  avatarFormValidator.resetValidation();
 });
