@@ -220,10 +220,11 @@ async function editAvatarForm(data) {
 const profileModal = new PopupWithForm(editProfilePopup, submitProfileForm);
 profileModal.setEventListeners();
 
-async function submitProfileForm() {
+async function submitProfileForm(profile) {
   saveProfileEditButton.textContent = "Saving...";
   try {
-    const userValues = await api.editUserInfo(inputName.value, inputJob.value); //html inputs
+    // const userValues = await api.editUserInfo(inputName.value, inputJob.value); //html inputs
+    const userValues = await api.editUserInfo(profile.name, profile.job); //html inputs
     if (userValues) {
       userInfo.setUserInfo({
         name: userValues.name,
@@ -281,7 +282,6 @@ avatarFormValidator.enableValidation();
 openProfileEditButton.addEventListener("click", () => {
   profileModal.open();
   fillProfileInputs();
-  openProfileEditButton.resetValidation()
 });
 
 addNewPlacePopupButton.addEventListener("click", () => {
