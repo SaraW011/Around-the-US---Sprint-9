@@ -38,9 +38,7 @@ and imported to js: import "regenerator-runtime/runtime";
 
 ### Github-pages project:
 
-[Link to Github folder](https://github.com/SaraW011/AroundtheUS---sprint-9)
-
-[Link to live page](https://saraw011.github.io/AroundtheUS---sprint-9)
+[Link to Github folder]https://github.com/SaraW011/AroundtheUS---sprint-9--Final-JS)
 
 Tools Used:
 * Webpack
